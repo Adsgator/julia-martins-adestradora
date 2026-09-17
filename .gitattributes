@@ -1,0 +1,15 @@
+# Normaliza fim de linha: o repositório guarda LF, cada máquina recebe o
+# que o sistema dela usa. Sem isso, um commit feito no Windows aparece
+# como "arquivo inteiro alterado" para quem estiver em outro sistema.
+* text=auto eol=lf
+
+# Binários: nunca normalizar (corromperia o arquivo)
+*.webp  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
