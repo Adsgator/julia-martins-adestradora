@@ -12,7 +12,10 @@ export default defineConfig({
   site: 'https://juliamartinsadestradora.com.br',
   integrations: [
     react(),
-    sitemap(),
+    // /links é a página de bio-link do Instagram: declara `noindex` e não
+    // pode entrar no sitemap, senão o Search Console acusa "enviada, mas
+    // marcada como noindex" — o sitemap pede indexação e a meta nega.
+    sitemap({ filter: (page) => !page.includes('/links') }),
     icon(),
   ],
   compressHTML: true,

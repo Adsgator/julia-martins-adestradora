@@ -214,6 +214,30 @@ seção, lembre que ela não herda as suposições de contraste do resto da pág
 posterior, a combinar com a cliente. Páginas internas para Canicross, Grupo e
 Mentoria também — hoje são seções da one-page.
 
+### `/links` — a página de bio-link
+
+Irmã da `links.astro` da Natu: mesma estrutura (banner, avatar sobreposto,
+perfil, redes, lista de botões), vestida com a identidade da Júlia — verde
+`#1e432c`, caramelo no CTA de WhatsApp, creme e botões em pílula, no lugar
+dos 8px da Natu.
+
+**Standalone de propósito.** Não usa o `BaseLayout` nem o `global.css`: é
+aberta do Instagram, no 4G, para quatro botões. Carregar Tailwind, GSAP,
+Lenis e Swiper ali seria desperdício — hoje são 16 KB de HTML e 7,5 KB de
+CSS. O preço é declarar localmente o `@font-face` da Gliker e o punhado de
+valores que no site vêm do `@theme` (que é `inline` e não existe em runtime).
+As **cores continuam vindo de `tokens.css`**, que é `:root` puro e vive sem o
+`global.css` — a página não hardcoda paleta.
+
+Quatro links, nesta ordem: site da Júlia (verde), site da Natu,
+"Deixe sua avaliação" (o mesmo perfil do Google que o `Testimonials` usa) e
+WhatsApp (caramelo). O tracking segue o padrão do site: `link_click` em tudo
+que tem `data-tracking`, e `contato_wpp` só no WhatsApp.
+
+> **`noindex` e sitemap não convivem.** A página declara `noindex`, então o
+> `astro.config.mjs` a filtra do sitemap — senão o Search Console acusa
+> "enviada, mas marcada como noindex": o sitemap pede indexação e a meta nega.
+
 ---
 
 ## Densidade: a regra que mais importa aqui
@@ -870,6 +894,18 @@ As demais (`canicross-01..04`, `aula-02`, `aula-04`, `grupo-03`,
 `mentoria-02..04`, `julia-extra-01/02`) estão disponíveis como alternativa.
 
 `formula-01..04` (4 fotos da pasta `Formula Natural`) estão na seção de parceria.
+
+`avatar-julia.webp` é o único arquivo **derivado**, não uma foto nova: um
+recorte quadrado de `julia-retrato.webp` no rosto (440×440 a partir de
+235,80, reduzido a 400×400), para o avatar da `/links`. Existe porque num
+círculo de 96px o retrato de corpo inteiro deixa o rosto com ~16px —
+`object-position` desloca o recorte, não o enquadra. Para refazer:
+
+```js
+sharp("src/assets/images/julia-retrato.webp")
+  .extract({ left: 235, top: 80, width: 440, height: 440 })
+  .resize(400, 400).webp({ quality: 90 })
+```
 
 > A pasta `Prints de casos reais` (8 prints de conversa) continua fora de uso:
 > prints precisam de autorização dos clientes retratados.
