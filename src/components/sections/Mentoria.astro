@@ -1,0 +1,198 @@
+---
+// Mentoria — bloco 8 do roteiro.
+//
+// O roteiro traz dois públicos e 17 tópicos somados. Listar tudo na
+// vertical era o trecho mais pesado da página: agora os tópicos de
+// profissionais viram badges e os de creches entram num scroll-rail.
+// A Natu fecha a seção como prova de operação real.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import mentoria01 from "../../assets/images/mentoria-01.webp";
+import mentoria03 from "../../assets/images/mentoria-03.webp";
+import mentoria04 from "../../assets/images/mentoria-04.webp";
+import Carousel from "../global/Carousel.astro";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = "Olá! Quero conhecer a mentoria profissional.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const paraProfissionais = [
+  "organização de atendimento",
+  "avaliação de cães",
+  "planejamento de treinamento",
+  "rotina profissional",
+  "comunicação com donos",
+  "manejo",
+  "leitura comportamental",
+  "estruturação de serviços",
+  "posicionamento profissional",
+];
+
+const paraEspacos = [
+  { titulo: "Avaliação", texto: "Como avaliar se um cão está preparado para o espaço." },
+  { titulo: "Integração", texto: "Apresentações e adaptações de forma gradual." },
+  { titulo: "Grupos", texto: "Como pensar porte, energia, perfil e comportamento." },
+  { titulo: "Rotina", texto: "Atividade, interação e descanso." },
+  { titulo: "Manejo", texto: "Prevenir conflitos e administrar diferentes perfis." },
+  { titulo: "Equipe", texto: "Critérios e protocolos para todos trabalharem igual." },
+  { titulo: "Estrutura", texto: "Organizar o ambiente pensando em segurança." },
+  { titulo: "Cliente", texto: "Comunicar o trabalho e transmitir segurança aos donos." },
+];
+
+const fotos = [
+  { src: mentoria01, alt: "Júlia durante uma mentoria para profissionais" },
+  { src: mentoria03, alt: "Mentoria aplicada em espaço canino" },
+  { src: mentoria04, alt: "Trabalho de manejo durante a mentoria" },
+];
+---
+
+<section id="mentoria" class="section-py overflow-hidden bg-surface">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+      <div>
+        <span class="label-tag mb-5 inline-block" data-animate>Mentoria profissional</span>
+
+        <h2
+          class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+          data-animate
+        >
+          Quer trabalhar com cães?
+          <span class="text-primary">Posso ajudar a estruturar esse caminho.</span>
+        </h2>
+
+        <p class="mt-5 max-w-prose font-sans text-body-lg text-text-soft" data-animate>
+          Depois de anos trabalhando com cães e famílias e da criação da Natu Espaço Canino, reuni
+          uma experiência que vai além do treinamento individual. Hoje compartilho com profissionais.
+        </p>
+
+        <div class="mt-8" data-animate>
+          <h3 class="font-serif text-body-lg font-semibold text-text-main">
+            Para profissionais
+          </h3>
+          <p class="mt-1.5 font-sans text-body-sm text-text-soft">
+            Para quem está começando ou quer melhorar sua atuação. Podemos trabalhar:
+          </p>
+          <ul class="mt-4 flex flex-wrap gap-2">
+            {paraProfissionais.map((item) => <li class="badge">{item}</li>)}
+          </ul>
+        </div>
+      </div>
+
+      <div class="min-w-0">
+        <Carousel id="mentoria-fotos" slidesPerView={1} spaceBetween={16} loop navigation>
+          {
+            fotos.map((foto) => (
+              <div class="swiper-slide">
+                <div class="frame-editorial aspect-[4/5]">
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    class="h-full w-full object-cover"
+                    width={1066}
+                    height={1333}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </Carousel>
+      </div>
+    </div>
+  </div>
+
+  <!-- Creches e espaços caninos: 8 tópicos em trilho -->
+  <div class="container-wide mt-16">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-[42rem]">
+        <h3 class="font-serif text-display-md font-bold text-text-main" data-animate>
+          Para creches e espaços caninos
+        </h3>
+        <p class="mt-2 max-w-prose font-sans text-body-base text-text-soft" data-animate>
+          Uma creche não é apenas um lugar onde os cães brincam. É um ambiente de manejo. E quanto
+          maior o grupo, maior a necessidade de estrutura.
+        </p>
+      </div>
+
+      <p
+        class="flex items-center gap-2 font-sans text-body-sm text-text-muted"
+        aria-hidden="true"
+        data-animate
+      >
+        <Icon name="lucide:move-horizontal" class="h-4 w-4" />
+        8 frentes
+      </p>
+    </div>
+
+    <div
+      class="scroll-rail mt-8 cursor-grab"
+      data-rail-drag
+      data-rail-progress="mentoria"
+    >
+      {/* No desktop cabem 4 cards no container: a largura vem de `cqi` (1% do
+          container de consulta, que é o `.container-wide`) e não de `%` — o
+          `%` resolveria contra o track, bem mais largo que o container. Os
+          três gaps de 1.25rem saem da conta. */}
+      <ul class="scroll-rail-track">
+        {
+          paraEspacos.map((item) => (
+            <li class="scroll-rail-item w-[13rem] sm:w-[14.5rem]">
+              <article class="flex h-full flex-col rounded-[1.25rem] border border-border bg-background p-6">
+                <h4 class="font-serif text-body-lg font-semibold text-text-main">{item.titulo}</h4>
+                <p class="mt-2 font-sans text-body-sm text-text-soft">{item.texto}</p>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="rail-progress mt-8" data-rail-progress-for="mentoria" aria-hidden="true">
+      <span></span>
+    </div>
+  </div>
+
+  <!-- Natu como prova da metodologia -->
+  <div class="container-wide mt-14">
+    <div
+      class="flex flex-col gap-7 rounded-[2rem] bg-dark px-8 py-9 text-white sm:px-10 lg:flex-row lg:items-center lg:justify-between"
+      data-animate
+    >
+      <div class="max-w-[36rem]">
+        <p class="font-serif text-display-sm font-bold text-complement">
+          A Natu é parte dessa experiência.
+        </p>
+        <p class="mt-2 font-sans text-body-base text-white/72">
+          A metodologia da mentoria nasce da experiência prática de uma operação real.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row lg:flex-shrink-0">
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-secondary-gold justify-center"
+          data-tracking="whatsapp-mentoria"
+          data-section="mentoria"
+        >
+          Conhecer a mentoria
+          <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </a>
+
+        <a
+          href="https://natuespacocanino.com.br/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-6 py-3 font-sans text-body-sm font-semibold text-white transition-colors hover:border-complement/50 hover:text-complement"
+          data-tracking="link-natu"
+          data-section="mentoria"
+        >
+          Conhecer a Natu
+          <Icon name="lucide:external-link" class="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,195 @@
+---
+// Footer — dados de contato, links legais e assinatura da agência.
+//
+// TODO(cliente): preencher o e-mail quando a Júlia informar o endereço
+// completo (o briefing traz apenas "juliamartinsadestradora", sem domínio).
+// TODO(cliente): confirmar se o canal do YouTube (presente no site antigo)
+// deve entrar nas redes.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import logoJulia from "../../assets/images/logo-julia.webp";
+import Assinatura from "../../assets/svg/assinatura-adsgator.svg";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = import.meta.env.PUBLIC_WA_MESSAGE || "Olá! Vi o site e quero saber mais.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const redes = [
+  {
+    icone: "lucide:instagram",
+    label: "@juliamartinsadestradora",
+    nome: "Instagram",
+    href: "https://www.instagram.com/juliamartinsadestradora/",
+  },
+  {
+    icone: "lucide:music-2",
+    label: "@juliamartinsadestradora",
+    nome: "TikTok",
+    href: "https://www.tiktok.com/@juliamartinsadestradora",
+  },
+  {
+    icone: "lucide:external-link",
+    label: "natuespacocanino.com.br",
+    nome: "Natu Espaço Canino",
+    href: "https://natuespacocanino.com.br/",
+  },
+];
+
+const atalhos = [
+  { label: "Como eu trabalho", href: "#como-trabalho" },
+  { label: "Serviços", href: "#servicos" },
+  { label: "Método", href: "#metodo" },
+  { label: "Sobre a Júlia", href: "#sobre" },
+  { label: "Canicross", href: "#canicross" },
+  { label: "Treinamento em grupo", href: "#grupo" },
+  { label: "Mentoria", href: "#mentoria" },
+  { label: "FAQ", href: "#faq" },
+];
+---
+
+<footer id="footer" class="overflow-hidden bg-dark pb-6 pt-12 text-white lg:pb-8 lg:pt-16">
+  <div class="container-wide">
+    <div class="grid gap-10 md:grid-cols-2 lg:gap-8 xl:grid-cols-4">
+      <!-- Marca -->
+      <div class="lg:col-span-1">
+        <Image
+          src={logoJulia}
+          alt="Julia Martins Adestramento"
+          class="h-14 w-auto"
+          width={360}
+          height={151}
+          loading="lazy"
+        />
+        <p class="mt-5 max-w-sm font-sans text-body-base text-white/70">
+          Educação, comportamento e convivência canina. Ensinando cães a viver melhor e pessoas a
+          compreender e conduzir melhor seus cães.
+        </p>
+      </div>
+
+      <!-- Contato -->
+      <div>
+        <h2 class="mb-4 font-serif text-body-lg font-bold text-secondary">Fale comigo</h2>
+        <ul class="space-y-3">
+          <li>
+            <a
+              href={WA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="-my-1 flex items-center gap-3 py-1 font-sans text-body-base text-white/80 transition-colors hover:text-secondary"
+              data-tracking="whatsapp-footer"
+              data-section="footer"
+            >
+              <Icon name="lucide:phone" class="h-5 w-5 flex-shrink-0 text-secondary" />
+              (12) 98266-8716
+            </a>
+          </li>
+          {
+            redes.map((rede) => (
+              <li>
+                <a
+                  href={rede.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${rede.nome}: ${rede.label}`}
+                  class="-my-1 flex items-center gap-3 py-1 font-sans text-body-base text-white/80 transition-colors hover:text-secondary"
+                >
+                  <Icon name={rede.icone} class="h-5 w-5 flex-shrink-0 text-secondary" />
+                  {rede.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Atendimento -->
+      <div>
+        <h2 class="mb-4 font-serif text-body-lg font-bold text-secondary">Atendimento</h2>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3 font-sans text-body-base text-white/72">
+            <Icon name="lucide:map-pin" class="mt-0.5 h-5 w-5 flex-shrink-0 text-secondary" />
+            <span>
+              Itajubá • Piranguçu<br />
+              <span class="text-white/55">Datas em outras cidades a combinar</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3 font-sans text-body-base text-white/72">
+            <Icon name="lucide:house" class="mt-0.5 h-5 w-5 flex-shrink-0 text-secondary" />
+            <span>
+              Natu Espaço Canino<br />
+              <span class="text-white/55">Piranguçu/MG</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3 font-sans text-body-base text-white/72">
+            <Icon name="lucide:clock" class="mt-0.5 h-5 w-5 flex-shrink-0 text-secondary" />
+            <span>
+              Segunda a sexta, das 8h às 18h<br />
+              <span class="text-white/55">Conforme disponibilidade de agenda</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Navegação -->
+      <div>
+        <h2 class="mb-4 font-serif text-body-lg font-bold text-secondary">Navegar</h2>
+        <ul class="space-y-2.5">
+          {
+            atalhos.map((atalho) => (
+              <li>
+                <a
+                  href={atalho.href}
+                  class="-my-1 inline-block py-1 font-sans text-body-base text-white/72 transition-colors hover:text-secondary"
+                >
+                  {atalho.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Serviços em linha: reforça a amplitude do trabalho -->
+    <p class="mt-10 border-t border-white/10 pt-6 font-sans text-body-sm text-white/55">
+      Adestramento • Filhotes • Comportamento • Grupos • Canicross • Online • Mentoria
+    </p>
+
+    <div
+      class="mt-6 flex flex-col items-center gap-4 border-t border-white/10 pt-6 md:flex-row md:justify-between"
+    >
+      <p class="text-center font-sans text-body-sm text-white/55 md:text-left">
+        © {new Date().getFullYear()} Julia Martins Adestradora. Todos os direitos reservados.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+        <a
+          href="/politica-de-privacidade"
+          class="-my-1 inline-block py-1 font-sans text-body-sm text-white/60 transition-colors hover:text-secondary"
+        >
+          Política de Privacidade
+        </a>
+        <a
+          href="/termos-de-uso"
+          class="-my-1 inline-block py-1 font-sans text-body-sm text-white/60 transition-colors hover:text-secondary"
+        >
+          Termos de Uso
+        </a>
+        {/* Assinatura da agência: SVG inline com as cores da própria
+            Adsgator (cinza-claro + laranja da marca). Não recolorir os
+            traços — é marca de terceiro, como os selos da certificação. */}
+        <a
+          href="https://adsgator.com.br/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center transition-opacity hover:opacity-80"
+          aria-label="Site desenvolvido pela Adsgator"
+        >
+          <Assinatura class="h-[26px] w-auto" role="img" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+

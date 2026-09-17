@@ -1,0 +1,115 @@
+---
+// Hero — imagem da Júlia correndo com os cães ocupa a tela inteira.
+//
+// A foto do canicross na neblina é o ativo mais forte do acervo: já traz
+// movimento, emoção e os cães em ação. Por isso ela é o fundo, não um
+// elemento lateral. O texto vem sobreposto, alinhado à esquerda.
+//
+// Duas versões da imagem: wide no desktop e recorte vertical no mobile,
+// para a Júlia não sair do enquadramento em telas estreitas.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import heroMobile from "../../assets/images/hero-canicross-mobile.webp";
+import heroDesktop from "../../assets/images/hero-canicross.webp";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = import.meta.env.PUBLIC_WA_MESSAGE || "Olá! Vi o site e quero saber mais.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+---
+
+{/* Altura maior no desktop: em telas largas (1920) o `object-cover` recorta
+    a foto e o header caía em cima do rosto da Júlia. Mais altura dá respiro
+    entre os dois. */}
+<section
+  id="hero-section"
+  class="relative isolate flex min-h-[clamp(620px,94svh,900px)] items-end overflow-hidden bg-dark lg:min-h-[clamp(760px,96svh,1080px)]"
+>
+  <Image
+    src={heroMobile}
+    alt="Júlia Martins correndo com dois cães em uma estrada de terra"
+    class="absolute inset-0 -z-10 h-full w-full object-cover object-center md:hidden"
+    width={900}
+    height={969}
+    loading="eager"
+    fetchpriority="high"
+  />
+  {/* `object-top`: com a altura maior do hero, ancorar no topo mantém a Júlia
+      no enquadramento. Centralizado, o recorte cortava a parte de cima em
+      telas largas. */}
+  <Image
+    src={heroDesktop}
+    alt="Júlia Martins correndo com dois cães em uma estrada de terra"
+    class="absolute inset-0 -z-10 hidden h-full w-full object-cover object-top md:block"
+    width={1280}
+    height={855}
+    loading="eager"
+    fetchpriority="high"
+  />
+
+  <!-- Overlay em duas camadas.
+
+       A de baixo para cima carrega o contraste do texto: sobe opaca na base
+       e se dissolve antes da metade, para não lavar a foto inteira.
+
+       A segunda escurece só a faixa do topo, onde o header flutua sobre a
+       imagem — sem ela, o menu branco disputava com o céu claro da foto. -->
+  <div
+    class="absolute inset-0 -z-10 bg-gradient-to-t from-dark/95 via-dark/60 via-45% to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="absolute inset-x-0 top-0 -z-10 h-56 bg-gradient-to-b from-dark/70 to-transparent"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Sem `w-full`: ele sobrescrevia o `width: min(…, 1300px)` do
+       container e deixava a H1 escalar com a tela inteira. -->
+  <div class="container-wide pb-14 pt-32 sm:pb-16 lg:pb-20">
+    <div class="max-w-[46rem]">
+      <span
+        class="mb-6 inline-block rounded-full border border-white/25 bg-white/10 px-4 py-1.5 font-sans text-xs uppercase tracking-[0.16em] text-white backdrop-blur-sm"
+        data-animate
+      >
+        Educação e comportamento canino
+      </span>
+
+      <h1
+        class="font-serif text-display-hero font-bold text-white [text-wrap:balance]"
+        data-animate
+      >
+        Educação canina para uma
+        <span class="text-secondary">convivência melhor.</span>
+      </h1>
+
+      <p class="mt-6 max-w-[36rem] font-sans text-body-lg text-white/85" data-animate>
+        Mais do que ensinar comandos: entender o cão, estabelecer limites e construir uma relação de
+        confiança.
+      </p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center" data-animate>
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-secondary-gold justify-center px-7 py-3.5"
+          data-tracking="whatsapp-hero"
+          data-section="hero"
+        >
+          Agendar avaliação
+          <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </a>
+
+        <a
+          href="#como-trabalho"
+          class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 font-sans text-body-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+        >
+          Conheça meu trabalho
+          <Icon name="lucide:arrow-down" class="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

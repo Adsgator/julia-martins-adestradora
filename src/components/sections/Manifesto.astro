@@ -1,0 +1,99 @@
+---
+// Manifesto + "Para quem é" — blocos 2 e 0 do roteiro.
+//
+// Técnica: scrollytelling na frase de posicionamento — o texto se revela
+// palavra a palavra conforme o scroll, forçando a leitura no ritmo certo.
+//
+// O marquee de serviços saiu daqui para logo depois do Hero (Marquee.astro):
+// no fim desta seção ele chegava depois de o assunto já ter mudado.
+
+import { Icon } from "astro-icon/components";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = "Olá! Quero agendar uma avaliação para o meu cão.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const situacoes = [
+  "Seu filhote acabou de chegar e você quer começar certo.",
+  "Seu cão sabe os comandos, mas não responde quando precisa.",
+  "Os passeios se tornaram difíceis.",
+  "Seu cão reage a outros cães ou pessoas.",
+  "Você não entende o que ele tenta comunicar.",
+  "Quer melhorar a relação entre vocês.",
+  "Quer começar um esporte com seu cão.",
+  "Quer transformar sua experiência com cães em profissão.",
+];
+---
+
+<section id="manifesto" class="section-py bg-background">
+  <div class="container-wide">
+    <span class="label-tag mb-8 inline-block" data-animate>Manifesto</span>
+
+    <!-- Scrollytelling: a frase se acende palavra a palavra -->
+    <p
+      class="reveal-text max-w-[54rem] font-serif text-display-2xl font-bold text-text-main"
+      data-reveal-lines
+    >
+      Seu cão não precisa apenas obedecer. Ele precisa aprender a viver.
+    </p>
+
+    <div class="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-16">
+      <p class="max-w-prose font-sans text-body-lg text-text-soft" data-animate>
+        Educar vai além de ensinar a sentar ou andar ao lado. Envolve entender o comportamento,
+        reconhecer limites e construir uma comunicação clara que faça sentido na vida real.
+      </p>
+
+      <p class="max-w-prose font-sans text-body-lg text-text-soft" data-animate>
+        Um cão bem-educado não é o que obedece a qualquer comando. É o que consegue conviver, se
+        adaptar e responder ao seu humano mesmo diante das situações do dia a dia.
+      </p>
+    </div>
+
+    <!-- Talvez você tenha chegado aqui porque... -->
+    <div class="mt-16 rounded-[2rem] border border-border bg-surface p-8 sm:p-12">
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <div>
+          <h2
+            class="font-serif text-display-md font-bold text-text-main [text-wrap:balance]"
+            data-animate
+          >
+            Talvez você tenha chegado aqui porque...
+          </h2>
+
+          <p class="mt-4 max-w-prose font-sans text-body-base text-text-soft" data-animate>
+            O treinamento começa entendendo o que vocês precisam.
+          </p>
+
+          <a
+            href={WA_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary mt-7 inline-flex"
+            data-tracking="whatsapp-manifesto"
+            data-section="manifesto"
+            data-animate
+          >
+            Agendar avaliação
+            <Icon name="lucide:arrow-right" class="h-4 w-4" />
+          </a>
+        </div>
+
+        <ul class="grid gap-x-8 gap-y-3 sm:grid-cols-2" data-animate-group>
+          {
+            situacoes.map((situacao) => (
+              <li class="flex items-start gap-3" data-animate-item>
+                <Icon
+                  name="lucide:check"
+                  class="mt-1 h-4 w-4 flex-shrink-0 text-secondary"
+                  aria-hidden="true"
+                />
+                <span class="font-sans text-body-base text-text-soft">{situacao}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>

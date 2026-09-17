@@ -1,0 +1,164 @@
+---
+// Serviços — os 7 formatos em trilho horizontal.
+//
+// O trilho nasce alinhado ao container de 1300px e só o excedente sangra
+// para fora da tela — o container continua sendo a régua. Arrastável com o
+// mouse, com cursor customizado e barra de progresso.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import aula01 from "../../assets/images/aula-01.webp";
+import aula03 from "../../assets/images/aula-03.webp";
+import aula04 from "../../assets/images/aula-04.webp";
+import canicross02 from "../../assets/images/canicross-02.webp";
+import grupo03 from "../../assets/images/grupo-03.webp";
+import juliaExtra01 from "../../assets/images/julia-extra-01.webp";
+import mentoria02 from "../../assets/images/mentoria-02.webp";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+
+const servicos = [
+  {
+    slug: "educacao",
+    titulo: "Educação e treinamento",
+    texto:
+      "Para quem quer melhorar a comunicação e tornar o cão mais fácil de conduzir no dia a dia: obediência, autocontrole, foco, passeio e manejo.",
+    cta: "Conhecer treinamento",
+    mensagem: "Olá! Quero conhecer o treinamento de educação para o meu cão.",
+    imagem: aula01,
+    alt: "Cão em exercício de obediência durante o treinamento",
+    // Só esta foto: no corte 4:3 centralizado a cabeça saía. Alinhada ao
+    // topo, o enquadramento fecha. As outras já estavam boas no centro.
+    alinharTopo: true,
+  },
+  {
+    slug: "filhotes",
+    titulo: "Filhotes",
+    texto:
+      "Os primeiros meses são a maior oportunidade de ensinar o cão a viver bem no mundo: rotina, educação sanitária, mordidas, descanso e socialização.",
+    cta: "Conhecer para filhotes",
+    mensagem: "Olá! Tenho um filhote e quero conhecer o treinamento.",
+    imagem: aula03,
+    alt: "Filhote em processo de socialização",
+  },
+  {
+    slug: "comportamento",
+    titulo: "Comportamento",
+    texto:
+      "Medo, reatividade, ansiedade, destruição e dificuldade de ficar sozinho exigem avaliação. O primeiro passo é entender por que acontece.",
+    cta: "Falar sobre meu cão",
+    mensagem: "Olá! Meu cão tem um comportamento que preciso avaliar.",
+    imagem: juliaExtra01,
+    alt: "Júlia avaliando o comportamento de um cão",
+  },
+  {
+    slug: "grupo",
+    titulo: "Treinamento em grupo",
+    texto:
+      "Ensinar o cão a responder ao seu dono mesmo diante de distrações, outros cães e diferentes estímulos.",
+    cta: "Ver grupos",
+    mensagem: "Olá! Quero saber sobre as turmas de treinamento em grupo.",
+    imagem: grupo03,
+    alt: "Turma de treinamento em grupo",
+  },
+  {
+    slug: "canicross",
+    titulo: "Canicross",
+    texto:
+      "Para quem quer descobrir o esporte ao lado do cão: treinamento para iniciantes, conexão cão-condutor, condução e equipamentos.",
+    cta: "Conhecer o Canicross",
+    mensagem: "Olá! Quero conhecer o Canicross.",
+    imagem: canicross02,
+    alt: "Cão equipado para canicross",
+  },
+  {
+    slug: "online",
+    titulo: "Online",
+    texto:
+      "Orientação para famílias que estão longe ou precisam de acompanhamento na rotina de casa, com você como parte ativa do processo.",
+    cta: "Conhecer online",
+    mensagem: "Olá! Quero conhecer o atendimento online.",
+    imagem: aula04,
+    alt: "Tutor aplicando o treinamento na rotina",
+  },
+  {
+    slug: "mentoria",
+    titulo: "Mentoria profissional",
+    texto:
+      "Para quem trabalha ou quer trabalhar com cães, e para creches e espaços caninos que querem estruturar processos e rotina.",
+    cta: "Conhecer a mentoria",
+    mensagem: "Olá! Quero conhecer a mentoria profissional.",
+    imagem: mentoria02,
+    alt: "Júlia durante uma mentoria profissional",
+  },
+];
+---
+
+<section id="servicos" class="section-py bg-background">
+  <div class="container-wide">
+    <div class="max-w-[44rem]">
+      <span class="label-tag mb-5 inline-block" data-animate>Serviços</span>
+
+      <h2
+        class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+        data-animate
+      >
+        Encontre o treinamento que
+        <span class="text-primary">faz sentido para vocês</span>
+      </h2>
+    </div>
+
+    {/* Sem `data-rail-drag` nem cursor "arraste": quem conduz este trilho é
+        o scroll da página (ver `data-rail-pin` em ScrollAnimations). */}
+    <div class="scroll-rail mt-10" data-rail-pin data-rail-progress="servicos">
+      <!-- No desktop cabem 3 cards no container: a largura de cada um vem de
+           `cqi` (1% do container de consulta, que é o `.container-wide`) e
+           não de `%` — o `%` resolveria contra o track, bem mais largo que o
+           container. Os dois gaps de 1.25rem saem da conta. -->
+      <ul class="scroll-rail-track">
+        {
+          servicos.map((servico) => (
+            <li class="scroll-rail-item w-[18rem] sm:w-[20rem] lg:w-[calc((100cqi-2.5rem)/3)]">
+              <article class="flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-border bg-surface">
+                <div class="aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={servico.imagem}
+                    alt={servico.alt}
+                    class={`h-full w-full object-cover${servico.alinharTopo ? " object-top" : ""}`}
+                    width={900}
+                    height={675}
+                    loading="lazy"
+                  />
+                </div>
+
+                <div class="flex flex-1 flex-col p-6">
+                  <h3 class="font-serif text-display-sm font-bold text-text-main">
+                    {servico.titulo}
+                  </h3>
+
+                  <p class="mt-2.5 flex-1 font-sans text-body-sm text-text-soft">{servico.texto}</p>
+
+                  <a
+                    href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(servico.mensagem)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link-underline mt-5 inline-flex items-center gap-1.5 self-start font-sans text-body-sm font-semibold text-primary"
+                    data-tracking={`whatsapp-servico-${servico.slug}`}
+                    data-section="servicos"
+                  >
+                    {servico.cta}
+                    <Icon name="lucide:arrow-right" class="h-4 w-4" />
+                  </a>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="rail-progress mt-8" data-rail-progress-for="servicos" aria-hidden="true">
+      <span></span>
+    </div>
+  </div>
+</section>

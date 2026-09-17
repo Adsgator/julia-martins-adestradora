@@ -1,0 +1,116 @@
+---
+// Canicross — bloco 6 do roteiro.
+//
+// A foto de capa foi para o Hero, então aqui a seção usa carrossel com as
+// outras fotos do esporte. Fundo escuro: é a quebra de ritmo do meio da
+// página e conversa com o Hero sem repetir a mesma imagem.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import canicross01 from "../../assets/images/canicross-01.webp";
+import canicross02 from "../../assets/images/canicross-02.webp";
+import canicross03 from "../../assets/images/canicross-03.webp";
+import canicross04 from "../../assets/images/canicross-04.webp";
+import Carousel from "../global/Carousel.astro";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = "Olá! Quero começar no Canicross com o meu cão.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const trabalhamos = [
+  "condução",
+  "comandos direcionais",
+  "aceleração e desaceleração",
+  "conexão cão-condutor",
+  "equipamentos",
+  "comportamento na corrida",
+  "adaptação ao ambiente",
+  "progressão do treino",
+  "condicionamento gradual",
+];
+
+const fotos = [
+  { src: canicross01, alt: "Dupla treinando canicross em estrada de terra" },
+  { src: canicross03, alt: "Cão equipado para a corrida" },
+  { src: canicross04, alt: "Treino de condução no canicross" },
+  { src: canicross02, alt: "Preparação antes da corrida com o cão" },
+];
+---
+
+<section id="canicross" class="section-py bg-dark text-white">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
+      <div class="min-w-0">
+        <Carousel id="canicross-fotos" slidesPerView={1} spaceBetween={16} loop navigation>
+          {
+            fotos.map((foto) => (
+              <div class="swiper-slide">
+                <div class="frame-editorial aspect-[4/3]">
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    class="h-full w-full object-cover"
+                    width={1000}
+                    height={750}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </Carousel>
+      </div>
+
+      <div>
+        <span
+          class="mb-5 inline-block rounded-full border border-white/25 px-3.5 py-1.5 font-sans text-xs uppercase tracking-[0.16em] text-white/80"
+          data-animate
+        >
+          Canicross
+        </span>
+
+        <h2 class="font-serif text-display-xl font-bold text-white [text-wrap:balance]" data-animate>
+          Corra com seu cão.
+          <span class="text-secondary">Aprenda a trabalhar em equipe.</span>
+        </h2>
+
+        <p class="mt-5 max-w-prose font-sans text-body-lg text-white/78" data-animate>
+          Canicross é mais do que colocar um cão na frente e começar a correr. É construir uma
+          parceria entre cão e condutor, com treinamento voltado para iniciantes.
+        </p>
+
+        <p class="mt-7 font-sans text-body-sm uppercase tracking-[0.14em] text-white/55">
+          Trabalhamos
+        </p>
+        <ul class="mt-3 flex flex-wrap gap-2" data-animate-group>
+          {
+            trabalhamos.map((item) => (
+              <li
+                class="rounded-full border border-white/18 bg-white/[0.06] px-3.5 py-1.5 font-sans text-body-sm text-white/82"
+                data-animate-item
+              >
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="mt-7 font-serif text-display-sm font-semibold text-complement" data-animate>
+          O objetivo não é correr mais rápido. É aprender a correr juntos.
+        </p>
+
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-secondary-gold mt-7 inline-flex"
+          data-tracking="whatsapp-canicross"
+          data-section="canicross"
+        >
+          Quero começar no Canicross
+          <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,137 @@
+---
+// Método — os 6 passos em trilho horizontal dentro do container.
+//
+// A sequência é ordenada (avaliar → orientar), então o movimento horizontal
+// reforça a ideia de progressão.
+
+import { Icon } from "astro-icon/components";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = "Olá! Gostaria de agendar uma avaliação para o meu cão.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const passos = [
+  { titulo: "Avaliar", texto: "Entender comportamento, rotina, ambiente, histórico e objetivos." },
+  {
+    titulo: "Entender",
+    texto: "Identificar o que mantém o comportamento e quais habilidades desenvolver.",
+  },
+  { titulo: "Estruturar", texto: "Criar uma rotina e estratégias que facilitem o aprendizado." },
+  {
+    titulo: "Ensinar",
+    texto: "Construir comportamentos com treino, comunicação clara e critérios progressivos.",
+  },
+  {
+    titulo: "Generalizar",
+    texto: "Levar o aprendizado para diferentes ambientes, pessoas e situações.",
+  },
+  { titulo: "Orientar", texto: "Ensinar o dono a continuar conduzindo o cão depois da aula." },
+];
+
+const tambemEnsinamos = [
+  "esperar",
+  "relaxar",
+  "lidar com frustrações",
+  "tomar decisões",
+  "responder a estímulos",
+  "conviver",
+  "ser cão",
+];
+---
+
+<section id="metodo" class="section-py bg-surface">
+  <div class="container-wide">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-[44rem]">
+        <span class="label-tag mb-5 inline-block" data-animate>Método</span>
+
+        <h2
+          class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+          data-animate
+        >
+          Meu método não começa pelo comando.
+          <span class="text-secondary">Começa pelo cão.</span>
+        </h2>
+
+        <p class="mt-5 max-w-prose font-sans text-body-base text-text-soft" data-animate>
+          Antes de pensar no que ensinar, precisamos entender quem é aquele cão, qual é sua rotina e
+          qual é a dificuldade que aquela família está vivendo.
+        </p>
+      </div>
+
+      <p
+        class="flex items-center gap-2 font-sans text-body-sm text-text-muted"
+        aria-hidden="true"
+        data-animate
+      >
+        <Icon name="lucide:move-horizontal" class="h-4 w-4" />
+        6 etapas
+      </p>
+    </div>
+
+    <div
+      class="scroll-rail mt-10 cursor-grab"
+      data-rail-drag
+      data-rail-progress="metodo"
+    >
+      {/* No desktop cabem 4 cards no container: a largura vem de `cqi` (1% do
+          container de consulta, que é o `.container-wide`) e não de `%` — o
+          `%` resolveria contra o track, bem mais largo que o container. Os
+          três gaps de 1.25rem saem da conta. */}
+      <ol class="scroll-rail-track">
+        {
+          passos.map((passo, indice) => (
+            <li class="scroll-rail-item w-[15rem] sm:w-[17rem]">
+              <article class="relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-border bg-background p-6">
+                <span
+                  class="absolute top-2 right-3 font-serif font-bold leading-none text-primary/8 sm:-top-2 [font-size:clamp(3.5rem,8vw,5rem)]"
+                  aria-hidden="true"
+                >
+                  {indice + 1}
+                </span>
+
+                <div class="relative">
+                  <h3 class="font-serif text-display-sm font-bold text-text-main">{passo.titulo}</h3>
+                  <p class="mt-2 font-sans text-body-sm text-text-soft">{passo.texto}</p>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="rail-progress mt-8" data-rail-progress-for="metodo" aria-hidden="true">
+      <span></span>
+    </div>
+
+    <!-- Fechamento -->
+    <div
+      class="mt-12 flex flex-col gap-7 rounded-[2rem] border border-border bg-background p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-12"
+      data-animate
+    >
+      <div class="max-w-[32rem]">
+        <p class="font-serif text-display-md font-bold text-text-main">
+          Treinamento não é <span class="text-secondary">controle o tempo inteiro.</span>
+        </p>
+        <p class="mt-2 font-sans text-body-base text-text-soft">Também ensinamos o cão a:</p>
+
+        <ul class="mt-5 flex flex-wrap gap-2">
+          {tambemEnsinamos.map((verbo) => <li class="badge">{verbo}</li>)}
+        </ul>
+      </div>
+
+      <a
+        href={WA_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary flex-shrink-0 self-start lg:self-auto"
+        data-tracking="whatsapp-metodo"
+        data-section="metodo"
+      >
+        Agendar minha avaliação
+        <Icon name="lucide:arrow-right" class="h-4 w-4" />
+      </a>
+    </div>
+  </div>
+</section>

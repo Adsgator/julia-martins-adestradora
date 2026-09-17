@@ -1,0 +1,208 @@
+---
+// BaseLayout.astro — wrapper de todas as páginas do projeto.
+//
+// Header e Footer não estão aqui. Vêm da biblioteca Astroteca e são
+// compostos na página (index.astro): <BaseLayout> → <Header /> + main + <Footer />.
+//
+// Inclui: GTM, Consent Mode v2, SEO/OG, fontes, SkipLink, WhatsAppFloat,
+// CookieBanner, ScrollAnimations.
+//
+// Sem tema escuro: a cliente não quis. O script anti-flash e o toggle no
+// Footer foram removidos juntos — só tirar o botão deixaria preso no escuro
+// quem já o tivesse clicado (o `localStorage` continuaria mandando).
+
+import GTM from "../components/global/GTM.astro";
+import SkipLink from "../components/global/SkipLink.astro";
+import WhatsAppFloat from "../components/global/WhatsAppFloat.astro";
+import CookieBanner from "../components/islands/CookieBanner.tsx";
+import ScrollAnimations from "../components/islands/ScrollAnimations.tsx";
+
+// Poppins local, via @fontsource. Os cinco pesos cobrem o que o projeto
+// usa (300/400/500 no corpo, 600/700 nos destaques); cada @font-face só
+// baixa o arquivo quando algum elemento pede aquele peso, então declarar
+// os cinco não custa requisição.
+import "@fontsource/poppins/300.css";
+import "@fontsource/poppins/400.css";
+import "@fontsource/poppins/500.css";
+import "@fontsource/poppins/600.css";
+import "@fontsource/poppins/700.css";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  canonical?: string;
+  noindex?: boolean;
+  schema?: object;
+}
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || "https://juliamartinsadestradora.com.br";
+const seoTitle =
+  import.meta.env.PUBLIC_SEO_TITLE || "Adestradora em Itajubá e Piranguçu | Julia Martins";
+const seoDescription =
+  import.meta.env.PUBLIC_SEO_DESCRIPTION ||
+  "Educação canina para uma convivência melhor. Treinamento, comportamento, filhotes, grupos, canicross e mentoria em Itajubá, Piranguçu e online.";
+const seoKeywords =
+  import.meta.env.PUBLIC_SEO_KEYWORDS ||
+  "adestramento de cães, adestrador Itajubá, adestrador Piranguçu, comportamento canino, educação canina, treinamento de filhotes, canicross, mentoria adestramento";
+
+const {
+  title = seoTitle,
+  description = seoDescription,
+  keywords = seoKeywords,
+  ogTitle = seoTitle,
+  ogDescription = seoDescription,
+  canonical = siteUrl,
+  noindex = false,
+  schema,
+} = Astro.props;
+
+const GTM_ID = import.meta.env.PUBLIC_GTM_ID || "GTM-TVBKMTWJ";
+
+// TODO(cliente): preencher `email` quando a Júlia informar o endereço completo.
+const defaultSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Julia Martins Adestradora",
+  description:
+    "Educação, comportamento e treinamento canino. Atendimento personalizado para cães e tutores, presencial em Itajubá e Piranguçu ou online, com treinamento em grupo, canicross e mentoria profissional.",
+  url: siteUrl,
+  telephone: "+55-12-98266-8716",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Piranguçu",
+    addressRegion: "MG",
+    addressCountry: "BR",
+  },
+  areaServed: [
+    { "@type": "City", name: "Itajubá" },
+    { "@type": "City", name: "Piranguçu" },
+    { "@type": "City", name: "São José dos Campos" },
+    { "@type": "City", name: "Poços de Caldas" },
+  ],
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "08:00",
+      closes: "18:00",
+    },
+  ],
+  sameAs: [
+    "https://www.instagram.com/juliamartinsadestradora/",
+    "https://www.tiktok.com/@juliamartinsadestradora",
+    "https://natuespacocanino.com.br/",
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "5",
+    reviewCount: "31",
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Serviços",
+    itemListElement: [
+      "Educação e treinamento",
+      "Treinamento para filhotes",
+      "Comportamento canino",
+      "Treinamento em grupo",
+      "Canicross",
+      "Acompanhamento online",
+      "Mentoria profissional",
+    ].map((nome) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: nome },
+    })),
+  },
+};
+
+const finalSchema = schema || defaultSchema;
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+
+  {GTM_ID && <GTM id={GTM_ID} />}
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1e432c" />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={ogDescription} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={`${siteUrl}/og-image.jpg`} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta
+    property="og:image:alt"
+    content="Júlia Martins conduzindo um cão, com a chamada Educação canina para uma convivência melhor"
+  />
+  <meta property="og:locale" content="pt_BR" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={ogTitle} />
+  <meta name="twitter:description" content={ogDescription} />
+  <meta name="twitter:image" content={`${siteUrl}/og-image.jpg`} />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Todas as fontes são locais: Gliker em public/Gliker-font e Poppins
+       via @fontsource (importado acima). Não há preconnect para o Google
+       porque não há mais requisição externa de fonte. O preload evita o
+       flash de fonte nos títulos acima da dobra. -->
+  <link
+    rel="preload"
+    href="/Gliker-font/Gliker-SemiBold.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(finalSchema)} />
+
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("consent", "default", {
+      ad_storage: "denied",
+      analytics_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      wait_for_update: 500,
+    });
+  </script>
+</head>
+<body>
+  {GTM_ID && (
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe>
+    </noscript>
+  )}
+
+  <SkipLink />
+  <slot />
+  <WhatsAppFloat />
+  <CookieBanner client:only="react" />
+  <ScrollAnimations client:load />
+</body>
+</html>

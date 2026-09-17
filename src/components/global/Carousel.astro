@@ -1,0 +1,176 @@
+---
+// Carousel.astro — wrapper de carrossel baseado em Swiper.
+//
+// Renderiza a estrutura `.swiper` e inicializa o Swiper no cliente sobre os
+// slides passados via <slot>. Cada filho do slot deve ter a classe
+// `swiper-slide`. Os <Image> do Astro são renderizados no .astro que usa este
+// componente (preservando otimização), então passamos tudo por slot.
+//
+// As configurações de cada seção vêm por props e são serializadas em
+// data-attributes lidos pelo script de inicialização.
+
+interface Props {
+  id: string;
+  slidesPerView?: number;
+  slidesPerViewTablet?: number;
+  slidesPerViewMobile?: number;
+  spaceBetween?: number;
+  loop?: boolean;
+  autoplayDelay?: number; // ms; 0 = sem autoplay
+  navigation?: boolean;
+  class?: string;
+}
+
+const {
+  id,
+  slidesPerView = 1,
+  slidesPerViewTablet,
+  slidesPerViewMobile,
+  spaceBetween = 30,
+  loop = true,
+  autoplayDelay = 5000,
+  navigation = false,
+  class: className = "",
+} = Astro.props;
+
+const config = {
+  slidesPerView,
+  slidesPerViewTablet: slidesPerViewTablet ?? slidesPerView,
+  slidesPerViewMobile: slidesPerViewMobile ?? slidesPerView,
+  spaceBetween,
+  loop,
+  autoplayDelay,
+  navigation,
+};
+---
+
+<div class="natu-carousel-outer">
+<div
+  class:list={["natu-carousel swiper", className]}
+  data-carousel-id={id}
+  data-carousel-config={JSON.stringify(config)}
+>
+  <div class="swiper-wrapper">
+    <slot />
+  </div>
+  {navigation && (
+      <>
+        <button
+          type="button"
+          class="natu-carousel-prev"
+          aria-label="Slide anterior"
+          data-carousel-prev
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" class="w-5 h-5">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="natu-carousel-next"
+          aria-label="Próximo slide"
+          data-carousel-next
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" class="w-5 h-5">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </>
+    )
+  }
+</div>
+</div>
+
+<script>
+  import Swiper from "swiper";
+  import { A11y, Autoplay, Keyboard, Navigation } from "swiper/modules";
+  import "swiper/css";
+
+  interface CarouselConfig {
+    slidesPerView: number;
+    slidesPerViewTablet: number;
+    slidesPerViewMobile: number;
+    spaceBetween: number;
+    loop: boolean;
+    autoplayDelay: number;
+    navigation: boolean;
+  }
+
+  function initCarousels() {
+    const carousels = document.querySelectorAll<HTMLElement>(
+      ".natu-carousel[data-carousel-config]",
+    );
+
+    carousels.forEach((el) => {
+      if (el.dataset.carouselInit === "true") return;
+      el.dataset.carouselInit = "true";
+
+      const config: CarouselConfig = JSON.parse(
+        el.dataset.carouselConfig ?? "{}",
+      );
+
+      const prev = el.querySelector<HTMLElement>("[data-carousel-prev]");
+      const next = el.querySelector<HTMLElement>("[data-carousel-next]");
+
+      // Imagem é nativamente arrastável: o navegador iniciava o próprio
+      // drag-and-drop e engolia o gesto antes de o Swiper enxergá-lo.
+      for (const img of el.querySelectorAll("img")) {
+        img.draggable = false;
+      }
+
+      new Swiper(el, {
+        // Configuração alinhada com a da Natu, que é a referência que
+        // funciona. Esta aqui já teve `observer`, `observeParents`,
+        // `observeSlideChildren`, `threshold`, `resistanceRatio`,
+        // `touchReleaseOnEdges` e um `swiper.update()` a cada imagem
+        // carregada — cada um adicionado para consertar um sintoma, e a
+        // soma deles é que travava o carrossel: com `loop: true`, toda
+        // mutação de DOM fazia o Swiper recriar os slides clonados e
+        // perder a posição. NÃO reintroduzir sem necessidade comprovada.
+        modules: [A11y, Autoplay, Keyboard, Navigation],
+        slidesPerView: config.slidesPerViewMobile,
+        spaceBetween: config.spaceBetween,
+        // `rewind` no lugar de `loop`: no Swiper 12.2.0 o `loop: true` TRAVA.
+        // Medido nos dois projetos (aqui e na Natu): com loop, o carrossel
+        // anda até o fim, volta ao primeiro slide e para de responder —
+        // `isEnd` fica travado em true e nem seta nem arraste avançam.
+        //
+        //   loop: true    -> r1 r1 r1 r1 r1 r1      (preso)
+        //   rewind: true  -> r1 r2 r3 r0 r1 r2      (dá a volta)
+        //
+        // `rewind` entrega o mesmo que a cliente quer (chegou no fim, volta
+        // ao começo) sem o reordenamento de slides que o loop faz por baixo.
+        rewind: config.loop,
+        speed: 520,
+        grabCursor: true,
+        simulateTouch: true,
+        touchRatio: 1,
+        // Único ajuste de gesto que fica: o padrão (0.5) exige arrastar
+        // metade da largura do slide para trocar, o que num slide largo é
+        // mais que um gesto natural de mouse — abaixo disso ele voltava ao
+        // ponto de partida e parecia travado.
+        longSwipesRatio: 0.22,
+        keyboard: { enabled: true, onlyInViewport: true },
+        a11y: {
+          prevSlideMessage: "Slide anterior",
+          nextSlideMessage: "Próximo slide",
+        },
+        autoplay:
+          config.autoplayDelay > 0
+            ? { delay: config.autoplayDelay, disableOnInteraction: false, pauseOnMouseEnter: true }
+            : false,
+        navigation:
+          config.navigation && prev && next
+            ? { prevEl: prev, nextEl: next }
+            : false,
+        breakpoints: {
+          768: { slidesPerView: config.slidesPerViewTablet },
+          1024: { slidesPerView: config.slidesPerView },
+        },
+      });
+    });
+  }
+
+  initCarousels();
+  document.addEventListener("astro:after-swap", initCarousels);
+</script>

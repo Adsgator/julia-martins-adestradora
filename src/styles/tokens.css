@@ -1,0 +1,113 @@
+/*
+  tokens.css - unico arquivo que muda entre projetos
+
+  Define os valores dos tokens como CSS custom properties com o
+  prefixo --t-. O @theme do global.css mapeia estes valores para
+  utilitarios do Tailwind.
+
+  ── Identidade Julia Martins ──────────────────────────────────
+  Irma da Natu Espaco Canino, nao clone. O parentesco vem do
+  verde-escuro institucional e do fundo creme, herdados da Natu.
+  A distincao vem do acento caramelo (--t-secondary), que substitui
+  o laranja #f47a20 da Natu, e de um creme mais claro e editorial.
+*/
+
+:root {
+  /* Marca */
+  --t-primary: #1e432c;
+  --t-primary-dark: #122819;
+  --t-secondary: #b5793f;
+  --t-secondary-hover: #c98d51;
+  /* Caramelo escuro para TEXTO PEQUENO em caramelo. O #b5793f da marca mede
+     3,43:1 sobre o creme — passa nos 3:1 de texto grande, mas reprova nos
+     4,5:1 de texto normal. Este mede 4,57:1. Não substitui o --t-secondary:
+     botão, borda, ícone e título grande continuam com a cor da marca. */
+  --t-secondary-text: #9a6533;
+  --t-complement: #d6dfc4;
+  --t-accent-gold: #b5793f;
+  --t-accent-gold-hover: #c98d51;
+  --t-accent-gold-border: #9c6632;
+  --t-accent-gold-border-hover: #b5793f;
+
+  /* Superficies */
+  --t-background: #faf8f3;
+  --t-background-strong: #f2efe7;
+  --t-surface: #ffffff;
+  --t-surface-alt: #eef0e7;
+  --t-dark: #10180f;
+  --t-border: #e2dbcd;
+  --t-border-soft: rgba(30, 67, 44, 0.12);
+  --t-overlay-mist: rgba(250, 248, 243, 0.84);
+
+  /* Texto */
+  --t-text-main: #1d231d;
+  --t-text-soft: #5a6458;
+  /* Escurecido de #81897c para passar no AA: sobre o creme #faf8f3 o valor
+     antigo media 3,41:1 e o mínimo para texto normal é 4,5:1. Hoje mede
+     4,68:1. Continua mais claro que --t-text-soft, então a hierarquia
+     main > soft > muted segue intacta. */
+  --t-text-muted: #6b7268;
+  --t-text-dark: #1e432c;
+  --t-text-gray: #5a6458;
+
+  /* Utilitarias */
+  --t-wa: #25d366;
+  --t-avatar-primary: #1e432c;
+  --t-avatar-secondary: #b5793f;
+  --t-avatar-tertiary: #d6dfc4;
+  --t-avatar-quaternary: #eef0e7;
+
+  /* Tipografia */
+  --t-font-serif: "Gliker", Georgia, ui-serif, serif;
+  --t-font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  /* Tamanhos de fonte */
+  --t-text-h1: 2rem;
+  --t-text-h2: 1.8rem;
+  --t-text-h3: 1rem;
+  --t-text-body: 1rem;
+  --t-text-sm: 0.9rem;
+  --t-text-xs: 0.85rem;
+
+  /* Line heights */
+  --t-leading-h1: 2.2rem;
+  --t-leading-h3: 1.2rem;
+  --t-leading-body: 1.4rem;
+
+  /* Letter spacing */
+  --t-tracking-wide: 0.04rem;
+  --t-tracking-normal: 0.02rem;
+
+  /* Container */
+  --t-container-max: 1300px;
+}
+
+.dark {
+  --t-primary: #4a7c5f;
+  --t-primary-dark: #2d5a3d;
+  --t-complement: #c8d4b0;
+  --t-background: #161813;
+  --t-background-strong: #1c1f18;
+  --t-surface: #21251e;
+  --t-surface-alt: #2d3228;
+  --t-dark: #0f0d0a;
+  --t-border: #3a4133;
+  --t-border-soft: rgba(214, 223, 196, 0.12);
+  --t-overlay-mist: rgba(22, 24, 19, 0.72);
+  --t-text-main: #e6e6e6;
+  --t-text-soft: #bcc4b6;
+  --t-text-muted: #8a9185;
+  --t-text-dark: #4a7c5f;
+  --t-text-gray: #bcc4b6;
+  --t-wa: #25d366;
+  --t-secondary: #cf9052;
+  --t-secondary-hover: #e0a365;
+  --t-accent-gold: #cf9052;
+  --t-accent-gold-hover: #e0a365;
+  --t-accent-gold-border: #b5793f;
+  --t-accent-gold-border-hover: #cf9052;
+  --t-avatar-primary: #d6dfc4;
+  --t-avatar-secondary: #cf9052;
+  --t-avatar-tertiary: #3a4133;
+  --t-avatar-quaternary: #21251e;
+}

@@ -1,0 +1,107 @@
+---
+// Treinamento em grupo — bloco 7 do roteiro.
+//
+// As 4 fotos dos aulões entram num carrossel Swiper (com autoplay e
+// navegação), em vez do mosaico fixo que só cabia 3. Os 6 eixos viram
+// uma grade compacta de duas colunas ao lado do texto.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import grupo01 from "../../assets/images/grupo-01.webp";
+import grupo02 from "../../assets/images/grupo-02.webp";
+import grupo03 from "../../assets/images/grupo-03.webp";
+import grupo04 from "../../assets/images/grupo-04.webp";
+import Carousel from "../global/Carousel.astro";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = "Olá! Tenho interesse em uma turma de treinamento em grupo.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const eixos = [
+  { titulo: "Foco", texto: "Voltar a atenção para o dono." },
+  { titulo: "Autocontrole", texto: "Esperar e controlar impulsos." },
+  { titulo: "Convivência", texto: "Estar perto de outros cães sem interagir o tempo todo." },
+  { titulo: "Passeio", texto: "Construir uma condução mais funcional." },
+  { titulo: "Comunicação", texto: "O dono aprende a se comunicar melhor com o cão." },
+  { titulo: "Generalização", texto: "Levar o treino para situações da vida real." },
+];
+
+const fotos = [
+  { src: grupo01, alt: "Turma de treinamento em grupo reunida" },
+  { src: grupo02, alt: "Cães e tutores durante um aulão" },
+  { src: grupo03, alt: "Exercício de foco em meio a distrações" },
+  { src: grupo04, alt: "Trabalho de convivência entre cães no grupo" },
+];
+---
+
+<section id="grupo" class="section-py bg-surface">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-16">
+      <div>
+        <span class="label-tag mb-5 inline-block" data-animate>Treinamento em grupo</span>
+
+        <h2
+          class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+          data-animate
+        >
+          Obedecer em casa é diferente de
+          <span class="text-primary">responder no mundo.</span>
+        </h2>
+
+        <p class="mt-5 max-w-prose font-sans text-body-lg text-text-soft" data-animate>
+          No individual conseguimos controlar os estímulos. No mundo real, não: existem outros cães,
+          pessoas, cheiros, barulhos e distrações. O grupo cria justamente essa oportunidade.
+        </p>
+
+        <dl class="mt-8 grid gap-x-8 gap-y-4 sm:grid-cols-2" data-animate-group>
+          {
+            eixos.map((eixo) => (
+              <div class="border-t border-border pt-3" data-animate-item>
+                <dt class="font-serif text-body-lg font-semibold text-text-main">{eixo.titulo}</dt>
+                <dd class="mt-0.5 font-sans text-body-sm text-text-soft">{eixo.texto}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <a
+          href={WA_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary mt-8 inline-flex"
+          data-tracking="whatsapp-grupo"
+          data-section="grupo"
+          data-animate
+        >
+          Tenho interesse em uma turma
+          <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </a>
+      </div>
+
+      <div class="min-w-0">
+        <Carousel id="grupo-fotos" slidesPerView={1} spaceBetween={16} loop navigation>
+          {
+            fotos.map((foto) => (
+              <div class="swiper-slide">
+                <div class="frame-editorial aspect-[4/3]">
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    class="h-full w-full object-cover"
+                    width={1200}
+                    height={900}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </Carousel>
+
+        <p class="mt-4 font-sans text-body-sm text-text-muted">
+          As turmas são organizadas considerando o nível dos cães e os objetivos do treinamento.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

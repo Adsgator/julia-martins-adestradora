@@ -1,0 +1,73 @@
+---
+// Divisória de montanhas — herdada do site antigo, a pedido da cliente.
+//
+// É SVG inline, não imagem: precisa assumir a cor da seção de destino, e uma
+// imagem exigiria um arquivo por combinação de fundo.
+//
+// Duas responsabilidades separadas, e é isso que faz a serra funcionar sobre
+// qualquer fundo:
+//   - a camada da FRENTE usa `currentColor` = cor da seção seguinte. É ela
+//     que costura a emenda, então precisa ser opaca e bater exato.
+//   - as camadas de TRÁS usam verdes da marca fixos, não opacidade sobre o
+//     fundo. Com opacidade, as cristas sumiam quando o destino era claro
+//     (creme sobre creme não tem contraste).
+//
+// Como usar: fica no fim da seção que termina, declarando a que começa.
+//
+//   <Divisoria para="dark" />   ← a seção seguinte é bg-dark
+//
+// `aria-hidden` porque é puramente decorativa.
+
+interface Props {
+  /** Fundo da seção que vem DEPOIS — é a cor que a camada da frente pinta. */
+  para: "background" | "surface" | "dark" | "primary";
+  /**
+   * Espelha a serra na vertical. Use no FIM de uma seção escura: as cristas
+   * apontam para baixo e a seção parece emoldurada por montanhas em cima e
+   * embaixo, em vez de ter uma faixa solta depois dela.
+   */
+  invertido?: boolean;
+  class?: string;
+}
+
+const { para, invertido = false, class: className = "" } = Astro.props;
+
+const cor = {
+  background: "text-background",
+  surface: "text-surface",
+  dark: "text-dark",
+  primary: "text-primary",
+}[para];
+
+// Cristas ao fundo: sempre verde da marca. Sobre destino escuro elas
+// precisam clarear (senão somem no preto), sobre destino claro escurecem.
+const escuro = para === "dark" || para === "primary";
+// Sobre destino escuro a crista distante clareia (verde-claro da marca),
+// senão ela desapareceria dentro do preto.
+const cristaLonge = escuro ? "var(--t-complement)" : "var(--t-primary)";
+const opLonge = escuro ? 0.28 : 0.22;
+const opPerto = escuro ? 0.55 : 0.45;
+---
+
+<div
+  class:list={["divisoria", cor, invertido && "divisoria-invertida", className]}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 1440 140" preserveAspectRatio="none" focusable="false">
+    <!-- Serra distante -->
+    <path
+      d="M0 78 C 120 44, 250 30, 372 46 C 520 66, 610 106, 744 100 C 880 94, 980 48, 1112 40 C 1238 32, 1348 58, 1440 82 L1440 140 L0 140 Z"
+      fill={cristaLonge}
+      opacity={opLonge}></path>
+    <!-- Serra intermediária -->
+    <path
+      d="M0 104 C 140 74, 268 62, 396 78 C 536 96, 654 128, 792 118 C 916 110, 1010 74, 1146 70 C 1268 66, 1360 88, 1440 104 L1440 140 L0 140 Z"
+      fill="var(--t-primary)"
+      opacity={opPerto}></path>
+    <!-- Encosta da frente: costura com a seção seguinte, sempre opaca.
+         Passa de 141 para garantir que não sobre um fio do fundo antigo. -->
+    <path
+      d="M0 122 C 160 100, 300 92, 438 106 C 578 120, 690 140, 828 132 C 952 124, 1052 100, 1180 98 C 1296 96, 1378 110, 1440 120 L1440 141 L0 141 Z"
+      fill="currentColor"></path>
+  </svg>
+</div>

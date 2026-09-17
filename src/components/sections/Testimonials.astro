@@ -1,0 +1,160 @@
+---
+// Depoimentos — avaliações reais do Google (depoimentos-google.md).
+//
+// A cliente pediu para evitar o genérico "clientes felizes, cães felizes"
+// do site antigo e usar o título abaixo. Os textos são reproduzidos na
+// íntegra; o nome do cão foi extraído do próprio depoimento quando citado.
+//
+// NÃO editar o conteúdo: são avaliações públicas de terceiros.
+
+import { Icon } from "astro-icon/components";
+
+// Perfil da Júlia no Google Maps, informado pela cliente.
+const GOOGLE_URL = "https://maps.app.goo.gl/3KAZTvTBmEtAhcgu7";
+
+const depoimentos = [
+  {
+    nome: "Mariana Bernal",
+    cao: "Cristal",
+    tratamento: "Tutora",
+    texto:
+      "A Julia foi um anjo em nossas vidas! Minha york já com quase 3 anos, com medo de outros cães e problemas dentro de casa como posse e desobediência, latidos excessivos, virou outra! Além da Cristal ter aprendido, e melhorado sua socialização com outros cães, eu aprendi também em como ser uma melhor tutora. A Julia é muito tranquila e passa essa tranquilidade pros cães e tutores.",
+  },
+  {
+    nome: "Tanise Frey",
+    cao: "Zico",
+    tratamento: "Tutora",
+    texto:
+      "A Julia acompanhou o Zico num momento crucial, dos 4 aos 6 meses, e foi essencial pra nossa jornada como tutores de primeira viagem. Ela não só ajudou o Zico a aprender, mas nos ensinou a nos comunicar melhor com ele. Mesmo sendo um filhote difícil, o Zico mudou muito nesse período, ficou mais calmo, conectado e obediente.",
+  },
+  {
+    nome: "Duda Soares",
+    // A avaliação cita a raça, não o nome do cão, e não traz marca de gênero
+    // ("Duda" serve para Eduarda e Eduardo). Sem os dois dados, a linha não
+    // aparece — igual às avaliações que não citam o cão.
+    cao: null,
+    tratamento: null,
+    texto:
+      "Minha experiência com a Julia tem sido incrível! Tenho um Jack Russell de 6 meses, uma raça muito enérgica e desafiadora, e graças ao adestramento, ele nunca destruiu nada em casa, mesmo ficando sozinho. Agora estamos iniciando as aulas de socialização, e já na primeira aula notei uma grande diferença! Ele ficou muito mais calmo em público, algo que antes era impossível.",
+  },
+  {
+    nome: "Rozana Mariano",
+    cao: "Kali",
+    tratamento: "Tutora",
+    texto:
+      "A Júlia foi fundamental no adestramento da Kali, hoje ela já obedece os comandos, conseguimos passear com ela super tranquila na rua. Por ela ser da raça American bully as pessoas já tem o preconceito errado de que ela vai atacar, imagina se não fosse adestrada. Muito obrigada Julia por cuidar da nossa “obrinhas”.",
+  },
+  {
+    nome: "Renata da Silva",
+    cao: null,
+    tratamento: null,
+    texto:
+      "A Julia é uma profissional sem igual, fácil ver a paixão dela pelos animais e foco no bem estar deles. Recomendo a todos. As cachorras de casa são apaixonadas por ela, o que só reforça a atenção e carinho que ela dedica a elas.",
+  },
+  {
+    nome: "Letícia Silvino",
+    cao: null,
+    tratamento: null,
+    texto:
+      "Ótima profissional, sempre atenciosa e muito paciente com os dogs. Ficamos sempre muito atentos a toda orientação e comando.",
+  },
+];
+---
+
+<section id="depoimentos" class="section-py bg-background" aria-labelledby="depoimentos-heading">
+  <div class="container-wide">
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-[44rem]">
+        <span class="label-tag mb-5 inline-block" data-animate>Depoimentos</span>
+
+        <h2
+          id="depoimentos-heading"
+          class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+          data-animate
+        >
+          Histórias reais.
+          <span class="text-primary">Relações que mudaram.</span>
+        </h2>
+
+        <p class="mt-4 max-w-prose font-sans text-body-lg text-text-soft" data-animate>
+          O que acontece quando cão e humano começam a se entender melhor.
+        </p>
+      </div>
+
+      <!-- Selo do Google: dado real do briefing -->
+      <a
+        href={GOOGLE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex flex-shrink-0 items-center gap-4 rounded-2xl border border-border bg-surface px-6 py-5 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        aria-label="Ver as avaliações de Julia Martins Adestradora no Google"
+        data-animate
+      >
+        <div
+          class="flex h-11 w-11 items-center justify-center rounded-full bg-secondary/12 text-secondary"
+        >
+          <Icon name="lucide:star" class="h-5 w-5 fill-current" />
+        </div>
+
+        <div>
+          <div class="flex items-baseline gap-2">
+            <span class="font-serif text-display-sm font-bold text-text-main">5,0</span>
+            <span class="text-sm tracking-[0.18em] text-secondary-text" aria-label="5 estrelas">
+              ★★★★★
+            </span>
+          </div>
+          <span class="font-sans text-body-sm text-text-muted">31 avaliações no Google</span>
+        </div>
+      </a>
+    </div>
+
+    <div
+      class="scroll-rail mt-10 cursor-grab"
+      data-rail-drag
+      data-rail-progress="depoimentos"
+    >
+      <ul class="scroll-rail-track">
+        {
+          depoimentos.map((depoimento) => (
+            <li class="scroll-rail-item w-[19rem] sm:w-[22rem]">
+              <figure class="flex h-full flex-col rounded-[1.5rem] border border-border bg-surface p-7">
+                <div class="flex items-center gap-1 text-secondary-text" aria-label="5 estrelas">
+                  {[0, 1, 2, 3, 4].map(() => (
+                    <Icon name="lucide:star" class="h-4 w-4 fill-current" aria-hidden="true" />
+                  ))}
+                </div>
+
+                {/* `line-clamp-6` corta no 6º verso e põe reticências. É corte
+                    VISUAL: o texto completo continua no HTML, porque são
+                    avaliações públicas de terceiros e não se editam. Sem o
+                    clamp, o depoimento de 124 caracteres deixava um vão
+                    branco enorme ao lado do de 380. */}
+                <blockquote class="mt-4 mb-6 line-clamp-6 font-sans text-body-sm text-text-soft">
+                  {depoimento.texto}
+                </blockquote>
+
+                {/* `mt-auto` empurra a assinatura para a base: sem o `flex-1`
+                    do blockquote, é ela que mantém os nomes alinhados entre
+                    cards de tamanhos diferentes. */}
+                <figcaption class="mt-auto border-t border-border pt-4">
+                  <span class="block font-serif text-body-lg font-semibold text-text-main">
+                    {depoimento.nome}
+                  </span>
+                  {depoimento.cao && depoimento.tratamento && (
+                    <span class="mt-0.5 block font-sans text-body-sm text-text-muted">
+                      {depoimento.tratamento} de {depoimento.cao}
+                    </span>
+                  )}
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="rail-progress mt-8" data-rail-progress-for="depoimentos" aria-hidden="true">
+      <span></span>
+    </div>
+  </div>
+</section>

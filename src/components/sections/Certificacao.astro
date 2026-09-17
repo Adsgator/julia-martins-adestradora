@@ -1,0 +1,79 @@
+---
+// Certificação CNA/CBKC — recuperada do site antigo a pedido da cliente.
+//
+// É o ativo de autoridade mais forte da página: um registro verificável em
+// conselho, não uma autodeclaração. Por isso entra logo depois do "Sobre",
+// fechando a apresentação pessoal com a credencial formal.
+//
+// O texto é o do site antigo, palavra por palavra. Credencial não se
+// parafraseia: reescrever "órgão vinculado à CBKC filiada à FCI" pode mudar
+// o que está sendo afirmado sobre um registro profissional real.
+//
+// O layout do Figma era duas caixas coladas (azul + branca). Aqui vira um
+// card só, com os selos à esquerda sobre o verde da marca, porque o azul
+// original não existe nesta paleta.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import seloCbkc from "../../assets/images/selo-cbkc.webp";
+import seloCna from "../../assets/images/selo-cna.webp";
+import seloFci from "../../assets/images/selo-fci.webp";
+
+const selos = [
+  { src: seloCbkc, alt: "Selo da Confederação Brasileira de Cinofilia (CBKC)" },
+  { src: seloCna, alt: "Selo do Conselho Nacional de Adestramento (CNA)" },
+  { src: seloFci, alt: "Selo da Fédération Cynologique Internationale (FCI)" },
+];
+---
+
+<section id="certificacao" class="section-py-sm bg-surface">
+  <div class="container-wide">
+    <div
+      class="grid overflow-hidden rounded-[2rem] border border-border lg:grid-cols-[0.85fr_1.15fr]"
+      data-animate
+    >
+      <!-- Lado dos selos: verde da marca, como o azul do layout antigo -->
+      <div class="flex flex-col justify-center gap-7 bg-primary p-8 sm:p-10">
+        <ul class="flex flex-wrap items-center gap-5 sm:gap-7">
+          {
+            selos.map((selo) => (
+              <li class="rounded-full bg-white/95 p-2.5">
+                <Image
+                  src={selo.src}
+                  alt={selo.alt}
+                  class="h-14 w-14 object-contain sm:h-16 sm:w-16"
+                  width={112}
+                  height={112}
+                  loading="lazy"
+                />
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="font-serif text-display-sm font-bold text-white">
+          Profissional registrada no Conselho Nacional de Adestramento (CNA) &ndash; CBKC.
+        </p>
+      </div>
+
+      <!-- Lado do texto: fundo claro, como no layout antigo -->
+      <div class="flex flex-col justify-center gap-4 bg-background p-8 sm:p-10">
+        <p class="max-w-prose font-sans text-body-lg text-text-soft">
+          Sou adestradora oficialmente registrada no Conselho Nacional de Adestramento (CNA), órgão
+          vinculado à CBKC filiada à FCI.
+        </p>
+
+        <p class="max-w-prose font-sans text-body-base text-text-soft">
+          A Confederação Brasileira de Cinofilia, que regulamenta e reconhece profissionais da área
+          de adestramento canino no Brasil. Esse registro confirma meu compromisso com a ética, o
+          bem-estar animal e o profissionalismo.
+        </p>
+
+        <p class="mt-1 flex items-center gap-2 font-sans text-body-sm font-semibold text-primary">
+          <Icon name="lucide:badge-check" class="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          Registro ativo no conselho
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,107 @@
+---
+import { Image } from "astro:assets";
+import logoJulia from "../assets/images/logo-julia.webp";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const currentYear = new Date().getFullYear();
+
+// TODO(cliente): o briefing informou apenas "juliamartinsadestradora", sem
+// domínio. Substituir pelo e-mail real assim que a Júlia confirmar.
+const EMAIL_CONTATO = "contato@juliamartinsadestradora.com.br";
+---
+
+<BaseLayout
+  title="Termos de Uso | Julia Martins Adestradora"
+  description="Termos de uso do site de Julia Martins Adestradora."
+  canonical="https://juliamartinsadestradora.com.br/termos-de-uso"
+  noindex
+>
+  <main id="main-content" class="bg-background">
+    <section class="legal-shell">
+      <div class="glass-header mb-8 flex items-center justify-between gap-4 rounded-[24px] px-4 py-3 sm:px-5 sm:py-3.5 lg:rounded-[28px] lg:px-6">
+        <a href="/" aria-label="Ir para o início" class="flex shrink-0 items-center">
+          <Image
+            src={logoJulia}
+            alt="Julia Martins Adestramento"
+            class="h-10 w-auto sm:h-12"
+            width={360}
+            height={151}
+            loading="eager"
+          />
+        </a>
+        <a
+          href="/"
+          class="inline-flex items-center justify-center rounded-full border border-white/18 bg-white/8 px-5 py-2.5 font-sans text-body-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/14 hover:text-white"
+        >
+          Voltar
+        </a>
+      </div>
+
+      <article class="legal-card">
+        <h1 class="legal-title">Termos de Uso</h1>
+        <p class="legal-subtitle">
+          Última atualização: {new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
+        </p>
+
+        <p class="legal-copy">
+          Ao acessar o site
+          <strong class="text-text-main">juliamartinsadestradora.com.br</strong>, você concorda com
+          os presentes Termos de Uso. Se não concordar, por favor não utilize o site.
+        </p>
+
+        <h2 class="legal-heading">1. Finalidade do site</h2>
+        <p class="legal-copy">
+          Este site tem finalidade exclusivamente informativa e de captação de contatos para os
+          serviços de educação, comportamento e treinamento canino prestados por
+          <strong class="text-text-main"> Júlia Martins</strong>.
+        </p>
+
+        <h2 class="legal-heading">2. Informações e conteúdo</h2>
+        <p class="legal-copy">
+          O conteúdo publicado neste site tem caráter informativo sobre cuidados com cães e não
+          substitui uma consulta presencial com um adestrador profissional. Qualquer orientação
+          específica sobre comportamento animal deve ser obtida diretamente com Júlia Martins.
+        </p>
+
+        <h2 class="legal-heading">3. Propriedade intelectual</h2>
+        <p class="legal-copy">
+          Todos os textos, imagens, logotipos e demais elementos deste site são de propriedade de
+          <strong class="text-text-main"> Júlia Martins</strong> ou de terceiros que licenciaram
+          seu uso. É proibida a reprodução sem autorização prévia e por escrito.
+        </p>
+
+        <h2 class="legal-heading">4. Links externos</h2>
+        <p class="legal-copy">
+          Este site pode conter links para plataformas de terceiros, como Instagram, WhatsApp e Google.
+          Não nos responsabilizamos pelo conteúdo ou pelas práticas de privacidade dessas plataformas.
+        </p>
+
+        <h2 class="legal-heading">5. Limitação de responsabilidade</h2>
+        <p class="legal-copy">
+          Não nos responsabilizamos por danos diretos ou indiretos decorrentes do uso ou da
+          impossibilidade de uso deste site.
+        </p>
+
+        <h2 class="legal-heading">6. Alterações</h2>
+        <p class="legal-copy">
+          Estes Termos podem ser atualizados a qualquer momento. A versão vigente será sempre a
+          disponível nesta página, com a data de atualização indicada.
+        </p>
+
+        <h2 class="legal-heading">7. Contato</h2>
+        <p class="legal-copy">
+          Júlia Martins<br />
+          E-mail:
+          <a href={`mailto:${EMAIL_CONTATO}`} class="text-primary hover:underline">
+            {EMAIL_CONTATO}
+          </a><br />
+          WhatsApp: (12) 98266-8716
+        </p>
+      </article>
+
+      <p class="mt-8 text-center font-sans text-body-sm text-text-muted">
+        © {currentYear} Julia Martins Adestradora
+      </p>
+    </section>
+  </main>
+</BaseLayout>

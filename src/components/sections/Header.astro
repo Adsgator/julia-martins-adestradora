@@ -1,0 +1,237 @@
+---
+// Header — navegação fixa com glass, esconde ao rolar para baixo.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import logoJulia from "../../assets/images/logo-julia.webp";
+
+const WA_NUMBER = import.meta.env.PUBLIC_WA_NUMBER || "5512982668716";
+const WA_MESSAGE = import.meta.env.PUBLIC_WA_MESSAGE || "Olá! Vi o site e quero saber mais.";
+const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+const navLinks = [
+  { label: "Como eu trabalho", href: "#como-trabalho" },
+  { label: "Serviços", href: "#servicos" },
+  { label: "Método", href: "#metodo" },
+  { label: "Sobre", href: "#sobre" },
+  { label: "Canicross", href: "#canicross" },
+  { label: "Mentoria", href: "#mentoria" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contato", href: "#contato" },
+];
+---
+
+<header
+  id="main-header"
+  class="fixed left-0 right-0 top-0 z-50 pt-3 transition-all duration-300 sm:pt-4"
+  data-animate="header"
+>
+  <!-- Sem padding horizontal próprio e sem `max-w` na nav: quem define a
+       largura é o `.container-wide`, para o header bater exatamente com o
+       conteúdo das seções. -->
+  <div class="container-wide">
+    <nav
+      class="glass-header flex items-center justify-between rounded-[24px] px-3.5 py-3 sm:px-5 sm:py-3.5 lg:rounded-[28px] lg:px-6"
+    >
+      <a
+        href="#hero-section"
+        class="flex shrink-0 items-center"
+        aria-label="Julia Martins Adestramento — ir para o topo"
+      >
+        <Image
+          src={logoJulia}
+          alt="Julia Martins Adestramento"
+          class="h-10 w-auto sm:h-12 lg:h-14"
+          width={360}
+          height={151}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </a>
+
+      <div class="hidden items-center gap-1 xl:flex">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="rounded-full px-3.5 py-2 font-sans text-body-sm font-medium text-white/72 transition-all hover:bg-white/8 hover:text-white"
+            data-nav-link
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      <a
+        href={WA_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-secondary-gold hidden px-4 py-2.5 text-body-sm font-semibold xl:inline-flex"
+        data-tracking="whatsapp-header"
+        data-section="header"
+      >
+        <svg aria-hidden="true" class="h-[18px] w-[18px]" viewBox="0 0 448 512" fill="currentColor">
+          <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+        </svg>
+        WhatsApp
+      </a>
+
+      <button
+        id="mobile-menu-btn"
+        class="rounded-full border border-white/12 bg-white/10 p-2 text-white transition-colors hover:bg-white/14 xl:hidden"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="lucide:menu" class="h-6 w-6" id="menu-open-icon" />
+        <Icon name="lucide:x" class="hidden h-6 w-6" id="menu-close-icon" />
+      </button>
+    </nav>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="pointer-events-none glass-header container-wide fixed inset-x-0 top-[78px] max-h-[calc(100svh-5.5rem)] overflow-y-auto rounded-[24px] px-4 py-4 opacity-0 shadow-2xl transition-all duration-300 sm:top-[88px] xl:hidden"
+    aria-hidden="true"
+  >
+    <div class="flex flex-col gap-2">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="rounded-[18px] px-4 py-3 font-serif text-body-md font-medium text-white/72 transition-colors hover:bg-white/10 hover:text-secondary"
+          data-nav-link
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={WA_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-secondary-gold-mobile mt-2"
+        data-tracking="whatsapp-header-mobile"
+        data-section="header-mobile"
+      >
+        <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 448 512" fill="currentColor">
+          <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+        </svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    const header = document.getElementById("main-header");
+    if (!header) return;
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function updateHeader() {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 100) {
+        if (currentScrollY > lastScrollY && currentScrollY > 200) {
+          header.style.transform = "translateY(-100%)";
+        } else {
+          header.style.transform = "translateY(0)";
+        }
+      } else {
+        header.style.transform = "translateY(0)";
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          requestAnimationFrame(updateHeader);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+
+    const menuBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const openIcon = document.getElementById("menu-open-icon");
+    const closeIcon = document.getElementById("menu-close-icon");
+
+    function setMenuState(isOpen) {
+      if (!menuBtn || !mobileMenu) return;
+
+      mobileMenu.classList.toggle("opacity-0", !isOpen);
+      mobileMenu.classList.toggle("pointer-events-none", !isOpen);
+      mobileMenu.classList.toggle("opacity-100", isOpen);
+      mobileMenu.classList.toggle("pointer-events-auto", isOpen);
+      mobileMenu.setAttribute("aria-hidden", isOpen ? "false" : "true");
+      menuBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      document.body.style.overflow = isOpen ? "hidden" : "";
+
+      openIcon?.classList.toggle("hidden", isOpen);
+      closeIcon?.classList.toggle("hidden", !isOpen);
+    }
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener("click", function () {
+        setMenuState(mobileMenu.classList.contains("opacity-0"));
+      });
+
+      mobileMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          setMenuState(false);
+        });
+      });
+
+      // Fecha ao clicar fora do menu e do botão que o abre.
+      document.addEventListener("click", function (event) {
+        if (mobileMenu.classList.contains("opacity-0")) return;
+        if (mobileMenu.contains(event.target) || menuBtn.contains(event.target)) return;
+        setMenuState(false);
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") setMenuState(false);
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth >= 1280) setMenuState(false);
+      });
+    }
+
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll("[data-nav-link]");
+
+    if (sections.length && navLinks.length) {
+      const observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+
+            const id = entry.target.getAttribute("id");
+            navLinks.forEach(function (link) {
+              const href = link.getAttribute("href");
+              const isActive = href === "#" + id;
+
+              link.classList.toggle("text-secondary", isActive);
+              link.classList.toggle("text-white/72", !isActive);
+            });
+          });
+        },
+        {
+          root: null,
+          rootMargin: "-45% 0px -45% 0px",
+          threshold: 0,
+        },
+      );
+
+      sections.forEach(function (section) {
+        observer.observe(section);
+      });
+    }
+  })();
+</script>

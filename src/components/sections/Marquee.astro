@@ -1,0 +1,43 @@
+---
+// Faixa corrida com os serviços — entra logo depois do Hero.
+//
+// Ficava no fim do Manifesto, onde soava avulsa: chegava depois do texto
+// já ter mudado de assunto. Colada no Hero ela ganha função — é o primeiro
+// resumo do que a Júlia faz, antes de a página começar a argumentar.
+//
+// Dois tracks idênticos lado a lado; a animação desloca exatamente a largura
+// de um deles, então a segunda cópia termina onde a primeira começou.
+
+import { Icon } from "astro-icon/components";
+
+const servicos = [
+  "Educação e treinamento",
+  "Filhotes",
+  "Comportamento",
+  "Treinamento em grupo",
+  "Canicross",
+  "Online",
+  "Mentoria profissional",
+];
+---
+
+<div class="w-full overflow-hidden border-y border-border bg-surface py-5">
+  <!-- 18s para ~1830px de track = ~100px/s, a velocidade de uma barra de
+       notícias. Em 46s a faixa andava 40px/s: tecnicamente rodando, mas
+       lenta demais para o olho registrar como movimento — parecia parada. -->
+  <div class="marquee" style="--marquee-duration: 18s">
+    {
+      [0, 1].map(() => (
+        <div class="marquee-track" aria-hidden="true">
+          {servicos.map((servico) => (
+            <span class="flex items-center gap-8 whitespace-nowrap font-serif text-display-sm font-semibold text-text-main/70">
+              {servico}
+              <Icon name="lucide:paw-print" class="h-4 w-4 flex-shrink-0 text-secondary" />
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+  <p class="sr-only">Serviços: {servicos.join(", ")}.</p>
+</div>

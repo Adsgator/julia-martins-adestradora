@@ -1,0 +1,1273 @@
+/* ─────────────────────────────────────────────────────────────
+   global.css — Tailwind v4 (CSS-first) + base Adsgator
+   ─────────────────────────────────────────────────────────────
+   Ordem:
+     1. tokens.css        → valores (CSS custom properties) do cliente
+     2. @import tailwindcss → engine v4
+     3. @theme            → registra os tokens como utilitários Tailwind
+     4. @layer base/components → reset, tipografia e classes de UI
+
+   Não existe tailwind.config.js. Para trocar a paleta de um cliente,
+   edite SOMENTE tokens.css.
+   ───────────────────────────────────────────────────────────── */
+
+/* Fontes — todas locais. Poppins vem do @fontsource, importado no
+   BaseLayout; Gliker tem @font-face próprio logo abaixo.
+
+   O @import do Google Fonts que existia aqui foi removido: era a pior
+   forma de carregar fonte (o navegador baixa o CSS, parseia, só então
+   descobre o CSS do Google, baixa, e só então busca o .woff2 — três idas
+   encadeadas), e mandava o IP de cada visitante para o Google, o que
+   destoa da política de privacidade que o próprio site declara.
+
+   Montserrat saiu junto: --font-montserrat estava declarado e não era
+   usado em lugar nenhum. Medido no navegador, o arquivo nunca chegava a
+   ser baixado. Se voltar a ser preciso, é um @fontsource a mais. */
+
+/* Gliker Font Local */
+@font-face {
+  font-family: "Gliker";
+  src: url("/Gliker-font/Gliker-SemiBold.woff2") format("woff2"),
+    url("/Gliker-font/Gliker-SemiBold.woff") format("woff"), url("/Gliker-font/Gliker-SemiBold.ttf")
+    format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gliker";
+  src: url("/Gliker-font/Gliker-Bold.woff2") format("woff2"), url("/Gliker-font/Gliker-Bold.woff")
+    format("woff"), url("/Gliker-font/Gliker-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gliker";
+  src: url("/Gliker-font/Gliker-Black.woff2") format("woff2"), url("/Gliker-font/Gliker-Black.woff")
+    format("woff"), url("/Gliker-font/Gliker-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import "./tokens.css";
+@import "tailwindcss";
+
+/* Dark mode por classe (.dark no <html>) em vez de media query */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── @theme — registra tokens como utilitários ──────────────
+   Os valores apontam para as CSS vars de tokens.css, então
+   bg-primary, text-text-main, etc. respeitam o tema em runtime
+   (inclusive a troca para .dark). */
+@theme inline {
+  --color-primary: var(--t-primary);
+  --color-primary-dark: var(--t-primary-dark);
+  --color-secondary: var(--t-secondary);
+  --color-secondary-hover: var(--t-secondary-hover);
+  --color-secondary-text: var(--t-secondary-text);
+  --color-complement: var(--t-complement);
+  --color-accent-gold: var(--t-accent-gold);
+  --color-accent-gold-hover: var(--t-accent-gold-hover);
+  --color-accent-gold-border: var(--t-accent-gold-border);
+  --color-accent-gold-border-hover: var(--t-accent-gold-border-hover);
+  --color-background: var(--t-background);
+  --color-background-strong: var(--t-background-strong);
+  --color-surface: var(--t-surface);
+  --color-surface-alt: var(--t-surface-alt);
+  --color-dark: var(--t-dark);
+  --color-border: var(--t-border);
+  --color-border-soft: var(--t-border-soft);
+  --color-overlay-mist: var(--t-overlay-mist);
+  --color-text-main: var(--t-text-main);
+  --color-text-soft: var(--t-text-soft);
+  --color-text-muted: var(--t-text-muted);
+  --color-text-dark: var(--t-text-dark);
+  --color-text-gray: var(--t-text-gray);
+  --color-wa: var(--t-wa);
+  --color-avatar-primary: var(--t-avatar-primary);
+  --color-avatar-secondary: var(--t-avatar-secondary);
+  --color-avatar-tertiary: var(--t-avatar-tertiary);
+  --color-avatar-quaternary: var(--t-avatar-quaternary);
+
+  --font-serif: var(--t-font-serif);
+  --font-sans: var(--t-font-sans);
+
+  /* ── Escala tipográfica EXATA do Elementor original (fixa) ──
+     Usada para fidelidade 1:1. text-h-hero…text-h-cap + line-heights. */
+  --text-h-hero: 3rem;
+  --text-h-hero--line-height: 3.2rem;
+  --text-h-hero--letter-spacing: 0.04rem;
+  --text-h-proposito: 2.4rem;
+  --text-h-proposito--line-height: 2.6rem;
+  --text-h-proposito--letter-spacing: 0.04rem;
+  --text-h-section: 2.2rem;
+  --text-h-section--line-height: 2.4rem;
+  --text-h-section--letter-spacing: 0.04rem;
+  --text-h-footer: 1.8rem;
+  --text-h-footer--line-height: 2rem;
+  --text-h-footer--letter-spacing: 0.04rem;
+  --text-h-card: 1.6rem;
+  --text-h-card--line-height: 1.8rem;
+  --text-h-card--letter-spacing: 0.04rem;
+  --text-h-cardsm: 1.4rem;
+  --text-h-cardsm--line-height: 1.6rem;
+  --text-h-cardsm--letter-spacing: 0.04rem;
+  --text-h-mini: 1.2rem;
+  --text-h-mini--line-height: 1.4rem;
+  --text-h-mini--letter-spacing: 0.04rem;
+  --text-eyebrow: 1.2rem;
+  --text-eyebrow--line-height: 1.4rem;
+  --text-eyebrow--letter-spacing: 0.15rem;
+  --text-body-base: 1rem;
+  --text-body-base--line-height: 1.4rem;
+  --text-body-base--letter-spacing: 0.04rem;
+  --text-pill: 0.9rem;
+  --text-pill--line-height: 1.1rem;
+  --text-pill--letter-spacing: 0.1rem;
+
+  /* Escala tipográfica */
+
+  /* Monumentais — aberturas de seção do design expressivo.
+     A unidade fluida é `cqi` (1% da largura do container de consulta), não
+     `vw`. O `body` abre o container de consulta, então o título escala com
+     o container de 1300px e para de crescer junto com a tela em monitores
+     largos — era o que fazia a H1 do Hero vazar do container. A primeira
+     declaração em `vw` é o fallback para navegadores sem `cqi`.
+
+     A escala é monotônica em TODOS os breakpoints: hero > 2xl > xl > lg >
+     md > sm. Antes `xl` (mín. 2.6rem) era maior que `2xl` (mín. 2.2rem) no
+     mobile e a hierarquia se invertia.
+
+     `xl`, `lg`, `md` e `sm` usam a forma `base + k*cqi`, não `k*cqi` puro.
+     Com `k*cqi` a curva só vencia o mínimo perto de 1000px de container, e
+     a faixa de tablet (640–1000px) exibia título do mesmo tamanho do
+     celular de 320px — medido: `display-lg` ficava em 25.6px tanto num
+     container de 336px quanto num de 728px. O termo fixo tira a curva do
+     mínimo mais cedo. Mínimo e máximo não mudaram: mobile e desktop estão
+     exatamente como estavam aprovados. */
+  --text-display-hero: clamp(2.35rem, 6.4vw, 4.6rem);
+  --text-display-hero: clamp(2.35rem, 6.4cqi, 4.6rem);
+  --text-display-hero--line-height: 1.02;
+  --text-display-hero--letter-spacing: -0.03em;
+
+  --text-display-2xl: clamp(2rem, 5vw, 3.6rem);
+  --text-display-2xl: clamp(2rem, 5cqi, 3.6rem);
+  --text-display-2xl--line-height: 1.06;
+  --text-display-2xl--letter-spacing: -0.025em;
+
+  --text-display-xl: clamp(1.8rem, 0.96rem + 2.42vw, 2.9rem);
+  --text-display-xl: clamp(1.8rem, 1.02rem + 2.42cqi, 2.9rem);
+  --text-display-xl--line-height: 1.1;
+  --text-display-xl--letter-spacing: -0.02em;
+
+  --text-display-lg: clamp(1.6rem, 1rem + 1.68vw, 2.35rem);
+  --text-display-lg: clamp(1.6rem, 1.05rem + 1.68cqi, 2.35rem);
+  --text-display-lg--line-height: 1.15;
+  --text-display-lg--letter-spacing: -0.015em;
+
+  --text-display-md: clamp(1.4rem, 1.13rem + 0.9vw, 1.85rem);
+  --text-display-md: clamp(1.4rem, 1.15rem + 0.9cqi, 1.85rem);
+  --text-display-md--line-height: 1.2;
+  --text-display-md--letter-spacing: -0.01em;
+
+  --text-display-sm: clamp(1.15rem, 0.87rem + 0.72vw, 1.45rem);
+  --text-display-sm: clamp(1.15rem, 0.89rem + 0.72cqi, 1.45rem);
+  --text-display-sm--line-height: 1.3;
+  --text-display-sm--letter-spacing: -0.005em;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.7;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.7;
+  --text-body-sm: 0.9rem;
+  --text-body-sm--line-height: 1.6;
+  --text-label: 0.72rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.16em;
+
+  /* Larguras máximas (exatas do Elementor) */
+  --container-content: 860px;
+  --container-wide: 1300px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+
+  /* Sombras */
+  --shadow-card: 0 18px 50px rgba(24, 37, 24, 0.08);
+  --shadow-card-hover: 0 24px 65px rgba(24, 37, 24, 0.12);
+  --shadow-float: 0 20px 60px rgba(24, 37, 24, 0.18);
+  --shadow-primary-sm: 0 14px 32px rgba(35, 72, 44, 0.18);
+  --shadow-primary-md: 0 20px 44px rgba(35, 72, 44, 0.24);
+  --shadow-secondary-sm: 0 14px 32px rgba(244, 122, 32, 0.2);
+  --shadow-secondary-md: 0 20px 44px rgba(244, 122, 32, 0.26);
+  /* Sombras exatas do original */
+  --shadow-elementor: 5px 5px 10px 0px rgba(0, 0, 0, 0.3);
+  --shadow-footer-top: 0px -25px 20px 10px rgba(0, 0, 0, 0.5);
+
+  /* Easing */
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-snappy: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Animações */
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  --animate-fade-in: fade-in 0.5s ease both;
+  --animate-shimmer: shimmer 1.5s infinite;
+}
+
+/* Larguras usadas como max-w-content / max-w-wide (utilitários custom) */
+@utility max-w-content {
+  max-width: var(--container-content);
+}
+@utility max-w-wide {
+  max-width: var(--container-wide);
+}
+
+/* ── BASE ────────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* overflow-x fica só no body: em <html> ele quebra o cálculo de altura
+       do ScrollTrigger quando o Lenis assume o scroll, e as seções abaixo
+       da dobra nunca disparam a animação de entrada. */
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--color-background);
+    background-image: radial-gradient(circle at top, rgba(214, 223, 196, 0.3), transparent 32%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), transparent 18rem),
+      linear-gradient(135deg, rgba(30, 67, 44, 0.04), transparent 42%);
+    color: var(--color-text-main);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -2;
+    background: radial-gradient(circle at 12% 14%, rgba(255, 255, 255, 0.9), transparent 28%),
+      radial-gradient(circle at 85% 10%, rgba(214, 223, 196, 0.34), transparent 24%),
+      repeating-linear-gradient(
+        135deg,
+        rgba(188, 148, 95, 0.045) 0,
+        rgba(188, 148, 95, 0.045) 2px,
+        transparent 2px,
+        transparent 30px
+      );
+    opacity: 0.75;
+  }
+
+  body::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 24rem;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(circle at 12% 100%, rgba(30, 67, 44, 0.14), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(30, 67, 44, 0.1), transparent 34%),
+      radial-gradient(circle at 86% 100%, rgba(30, 67, 44, 0.12), transparent 28%);
+    opacity: 0.9;
+  }
+
+  main,
+  section,
+  footer {
+    position: relative;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+  }
+
+  /* Scrollbar personalizada (exata do Elementor) */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-secondary);
+    border: solid 2px var(--color-primary);
+    border-radius: 5px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    display: block;
+  }
+
+  /* Reset de movimento para quem pede menos animação.
+     O `:not(.marquee-track)` é deliberado: a faixa corrida é decorativa,
+     contínua e de baixo contraste — não é o tipo de movimento que dispara
+     desconforto vestibular, e congelá-la deixava um bloco de texto cortado
+     no meio, parado, sem explicação. Ela desacelera em vez de parar (regra
+     no fim do arquivo).
+
+     ATENÇÃO: no Windows, "Mostrar animações" desligado já faz o Chrome
+     reportar `reduce`. Isso é mais comum do que parece — esta regra atinge
+     usuários reais, não só quem configurou acessibilidade de propósito. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *:not(.marquee-track),
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ── COMPONENTS ──────────────────────────────────────────── */
+@layer components {
+  .container-content {
+    width: min(calc(100% - 1.5rem), var(--container-content));
+    margin-inline: auto;
+  }
+  .container-wide {
+    width: min(calc(100% - 1.5rem), var(--container-wide));
+    margin-inline: auto;
+    /* Abre o container de consulta para a escala `cqi` dos títulos display.
+       `inline-size` mede só a largura e não afeta a altura, então não
+       interfere no cálculo do ScrollTrigger. */
+    container-type: inline-size;
+  }
+  .section-py {
+    @apply py-[clamp(4.5rem,8vw,6.75rem)];
+  }
+  .section-py-sm {
+    @apply py-[clamp(2.75rem,5vw,4.5rem)];
+  }
+  .section-py-lg {
+    @apply py-[clamp(5.75rem,11vw,8.5rem)];
+  }
+
+  .label-tag {
+    @apply inline-flex items-center gap-2 text-label font-medium uppercase tracking-[0.26em] text-secondary-text;
+  }
+
+  .label-tag::before,
+  .label-tag::after {
+    content: "";
+    @apply h-px w-8 bg-secondary/50;
+  }
+
+  .section-heading {
+    @apply font-serif text-display-lg font-bold text-text-dark;
+    text-wrap: balance;
+  }
+
+  .section-copy {
+    @apply max-w-2xl text-body-lg text-text-soft;
+    text-wrap: pretty;
+  }
+
+  .section-shell {
+    @apply rounded-[26px] border border-border/70 px-4 py-6 sm:px-6 sm:py-8 lg:rounded-[34px] lg:px-10 lg:py-12;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 253, 248, 0.76)),
+      linear-gradient(135deg, rgba(214, 223, 196, 0.22), transparent 58%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), var(--shadow-card);
+    backdrop-filter: blur(10px);
+  }
+
+  .section-shell-dark {
+    @apply rounded-[26px] border border-white/12 px-4 py-6 text-white sm:px-6 sm:py-8 lg:rounded-[36px] lg:px-10 lg:py-12;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+      linear-gradient(135deg, rgba(214, 223, 196, 0.12), transparent 55%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), var(--shadow-float);
+    backdrop-filter: blur(12px);
+  }
+
+  .premium-panel {
+    @apply rounded-[28px] border border-border/80 bg-surface;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), var(--shadow-card);
+  }
+
+  .premium-panel-dark {
+    @apply rounded-[28px] border border-white/12 bg-white/6 backdrop-blur-[12px];
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), var(--shadow-float);
+  }
+
+  .surface-card-light {
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-surface) 98%, transparent),
+        color-mix(in srgb, var(--color-background-strong) 92%, transparent)
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-complement) 16%, transparent),
+        transparent 62%
+      );
+  }
+
+  .surface-card-dark {
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-primary) 94%, transparent),
+        color-mix(in srgb, var(--color-dark) 98%, transparent)
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-complement) 10%, transparent),
+        transparent 55%
+      );
+  }
+
+  .surface-section-dark {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 96%, transparent) 0%,
+      color-mix(in srgb, var(--color-primary-dark) 90%, var(--color-primary) 10%) 55%,
+      color-mix(in srgb, var(--color-primary-dark) 98%, transparent) 100%
+    );
+  }
+
+  .surface-overlay-dark {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-dark) 12%, transparent) 0%,
+      color-mix(in srgb, var(--color-dark) 42%, transparent) 52%,
+      color-mix(in srgb, var(--color-dark) 74%, transparent) 100%
+    );
+  }
+
+  .surface-overlay-mist {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-overlay-mist) 18%, transparent) 0%,
+      color-mix(in srgb, var(--color-overlay-mist) 2%, transparent) 26%,
+      color-mix(in srgb, var(--color-dark) 72%, transparent) 100%
+    );
+  }
+
+  .surface-overlay-bottom {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 0%, transparent) 0%,
+      color-mix(in srgb, var(--color-primary) 22%, transparent) 26%,
+      color-mix(in srgb, var(--color-primary) 88%, transparent) 100%
+    );
+  }
+
+  .panel-top-glow {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, white 42%, transparent),
+      transparent
+    );
+  }
+
+  .glass-header {
+    @apply border border-white/10 bg-primary/76 backdrop-blur-[16px];
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 18px 42px rgba(13, 25, 16, 0.18);
+  }
+
+  .hero-overlay {
+    background: linear-gradient(
+        180deg,
+        rgba(12, 21, 13, 0.12) 0%,
+        rgba(12, 21, 13, 0.42) 52%,
+        rgba(12, 21, 13, 0.74) 100%
+      ), linear-gradient(110deg, rgba(247, 244, 238, 0.08), transparent 44%);
+  }
+
+  .image-frame {
+    @apply overflow-hidden rounded-[28px] border border-white/50 bg-surface-alt;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), var(--shadow-card);
+  }
+
+  .soft-divider {
+    @apply h-px w-full;
+    background: linear-gradient(90deg, transparent, rgba(35, 72, 44, 0.22), transparent);
+  }
+
+  button,
+  a {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .img-hover {
+    @apply overflow-hidden;
+  }
+  .img-hover img {
+    @apply transition-transform duration-700;
+    transition-timing-function: var(--ease-smooth);
+  }
+  .img-hover:hover img {
+    @apply scale-[1.04];
+  }
+
+  .card-hover {
+    @apply transition-all duration-[350ms];
+    transition-timing-function: var(--ease-smooth);
+  }
+  .card-hover:hover {
+    @apply -translate-y-1.5;
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .link-underline {
+    @apply relative inline-block;
+    /* 0.25rem em cima e embaixo leva o alvo de 23px para 31px, acima dos
+       24px mínimos da WCAG 2.5.8. O ::after acompanha o mesmo recuo para o
+       sublinhado continuar rente ao texto. */
+    padding-block: 0.25rem;
+  }
+  .link-underline::after {
+    content: "";
+    @apply absolute left-0 w-0 h-px bg-current transition-all duration-300;
+    bottom: 0.25rem;
+    transition-timing-function: var(--ease-snappy);
+  }
+  .link-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Botão primário */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-primary text-white font-sans font-medium
+           px-7 py-3.5 rounded-full border border-white/10
+           transition-all duration-300
+           hover:-translate-y-0.5 hover:bg-primary-dark
+           active:translate-y-0 active:scale-[0.98];
+    transition-timing-function: var(--ease-smooth);
+  }
+
+  /* Botão ghost */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-primary font-sans font-medium
+           px-7 py-3.5 rounded-full
+           border border-primary/20
+           transition-all duration-300
+           hover:border-primary/60 hover:bg-primary/5 hover:-translate-y-0.5
+           active:translate-y-0 active:scale-[0.98];
+    transition-timing-function: var(--ease-smooth);
+  }
+
+  /* Botão CTA secundário (dourado com shimmer) */
+  .btn-secondary-gold,
+  .btn-secondary-gold-mobile {
+    @apply inline-flex items-center justify-center gap-2 rounded-full
+           px-7 py-3.5
+           font-sans font-medium text-primary;
+    border: 1px solid var(--color-accent-gold-border);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-accent-gold) 96%, white 4%),
+      color-mix(in srgb, var(--color-secondary) 82%, var(--color-accent-gold) 18%)
+    );
+  }
+  .btn-secondary-gold-mobile {
+    @apply w-full px-6 py-3;
+  }
+  .btn-secondary-gold:hover,
+  .btn-secondary-gold-mobile:hover {
+    @apply -translate-y-0.5;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-accent-gold-hover) 96%, white 4%),
+      color-mix(in srgb, var(--color-secondary-hover) 82%, var(--color-accent-gold-hover) 18%)
+    );
+    border-color: var(--color-accent-gold-border-hover);
+  }
+  .btn-secondary-gold:active,
+  .btn-secondary-gold-mobile:active {
+    @apply translate-y-0 scale-[0.98];
+  }
+
+  /* Badge / pill */
+  .badge {
+    @apply inline-flex items-center gap-1.5
+           text-label font-medium uppercase tracking-[0.12em]
+           px-3.5 py-1.5 rounded-full
+           bg-primary/10 text-primary border border-primary/15;
+  }
+  .badge-secondary {
+    @apply inline-flex items-center gap-1.5
+           text-label font-medium uppercase tracking-[0.12em]
+           px-3.5 py-1.5 rounded-full
+           bg-secondary/10 text-secondary border border-secondary/15;
+  }
+
+  .blockquote-premium {
+    @apply relative pl-6 border-l-2 border-secondary
+           text-body-lg font-serif italic text-text-soft my-8;
+  }
+  .blockquote-premium::before {
+    content: '"';
+    @apply absolute -top-2 -left-1 text-4xl text-secondary/40 font-serif leading-none;
+  }
+
+  .stat-number {
+    @apply font-serif text-display-lg text-primary leading-none;
+  }
+  .stat-label {
+    @apply text-body-sm text-text-muted mt-1;
+  }
+
+  .divider-ornament {
+    @apply flex items-center gap-4 my-8;
+  }
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: "";
+    @apply flex-1 h-px bg-border;
+  }
+
+  .editorial-grid {
+    @apply grid gap-6 lg:gap-8;
+  }
+
+  .landscape-shell {
+    @apply relative isolate overflow-hidden;
+  }
+
+  .landscape-shell::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 36%;
+    background: radial-gradient(circle at 12% 100%, rgba(30, 67, 44, 0.18), transparent 32%),
+      radial-gradient(circle at 52% 100%, rgba(30, 67, 44, 0.14), transparent 36%),
+      radial-gradient(circle at 88% 100%, rgba(30, 67, 44, 0.18), transparent 30%);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .landscape-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .mist-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 253, 248, 0.68)),
+      linear-gradient(135deg, rgba(214, 223, 196, 0.16), transparent 62%);
+    backdrop-filter: blur(14px);
+  }
+
+  .legal-shell {
+    @apply mx-auto w-full max-w-content px-6 py-16 lg:px-8 lg:py-20;
+  }
+
+  .legal-card {
+    @apply rounded-[28px] border border-border/70 bg-surface p-8 shadow-card lg:p-10;
+  }
+
+  .legal-title {
+    @apply font-serif text-display-md font-bold text-text-main;
+  }
+
+  .legal-subtitle {
+    @apply mt-3 text-label font-medium uppercase tracking-[0.16em] text-text-muted;
+  }
+
+  .legal-heading {
+    @apply mt-10 font-serif text-display-sm font-bold text-primary;
+  }
+
+  .legal-copy {
+    @apply mt-4 font-sans text-body-md text-text-soft;
+  }
+
+  .avatar-primary {
+    background-color: var(--color-avatar-primary);
+  }
+
+  .avatar-secondary {
+    background-color: var(--color-avatar-secondary);
+  }
+
+  .avatar-tertiary {
+    background-color: var(--color-avatar-tertiary);
+  }
+
+  .avatar-quaternary {
+    background-color: var(--color-avatar-quaternary);
+  }
+
+  .page-watermark {
+    @apply pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 font-serif leading-none text-primary/6;
+    font-size: clamp(8rem, 24vw, 16rem);
+  }
+
+  .section-band {
+    @apply relative isolate;
+  }
+
+  .section-band::before {
+    content: "";
+    position: absolute;
+    inset: 2rem 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(30, 67, 44, 0.18), transparent);
+    pointer-events: none;
+  }
+
+  .mountain-divider {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mountain-divider::after {
+    content: "";
+    position: absolute;
+    inset: auto -8% -9rem;
+    height: 16rem;
+    background: radial-gradient(circle at 18% 0, rgba(30, 67, 44, 0.9), transparent 40%),
+      radial-gradient(circle at 52% 0, rgba(42, 83, 54, 0.72), transparent 44%),
+      radial-gradient(circle at 84% 0, rgba(17, 40, 24, 0.88), transparent 34%);
+    opacity: 0.16;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 640px) {
+  @layer components {
+    .container-content {
+      width: min(calc(100% - 2.5rem), var(--container-content));
+    }
+
+    .container-wide {
+      width: min(calc(100% - 2.5rem), var(--container-wide));
+    }
+  }
+}
+
+/* ── KEYFRAMES ───────────────────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ── LENIS ───────────────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ── ANIMAÇÕES DE ENTRADA (GSAP controla via [data-animate*]) ── */
+/* Estado inicial das animações de entrada.
+   IMPORTANTE: só esconde quando <html> tem .anim-ready, classe que o
+   ScrollAnimations adiciona assim que assume o controle. Sem isso, qualquer
+   falha de JS (erro, bloqueio, rede) deixaria a página inteira invisível.
+   Falhar mostrando conteúdo é sempre melhor que falhar escondendo. */
+.anim-ready [data-animate] {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.anim-ready [data-animate-left] {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.anim-ready [data-animate-right] {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.anim-ready [data-animate-scale] {
+  opacity: 0;
+  transform: scale(0.95);
+}
+.anim-ready [data-animate-item] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-animate],
+  [data-animate-left],
+  [data-animate-right],
+  [data-animate-scale],
+  [data-animate-item] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ── COMPOSIÇÃO EXPRESSIVA ───────────────────────────────────
+   Classes que quebram o ritmo "blocado" de seções empilhadas:
+   sangria para fora do container, imagens deslocadas, numeração
+   monumental e molduras editoriais. Usadas nas seções da Julia. */
+@layer components {
+  /* Imagem que sangra para fora do container até a borda da tela.
+     Só no desktop: no mobile a sangria some para preservar o gutter. */
+  .bleed-right {
+    margin-right: calc(50% - 50vw);
+  }
+  .bleed-left {
+    margin-left: calc(50% - 50vw);
+  }
+  @media (max-width: 1023px) {
+    .bleed-right,
+    .bleed-left {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+
+  /* Moldura de imagem editorial: cantos generosos e sombra profunda. */
+  .frame-editorial {
+    @apply overflow-hidden rounded-[2rem];
+    box-shadow: var(--shadow-float);
+  }
+
+  /* Número gigante de fundo (usado nos passos do Método). Fica atrás
+     do conteúdo, decorativo, sem competir com a leitura. */
+  .numeral-ghost {
+    @apply pointer-events-none select-none font-serif font-bold leading-none;
+    font-size: clamp(5rem, 13vw, 11rem);
+    color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  }
+
+  /* Linha de texto grande com destaque em caramelo no meio da frase. */
+  .lede {
+    @apply font-serif font-semibold text-text-main;
+    font-size: clamp(1.35rem, 2.7vw, 2.15rem);
+    line-height: 1.32;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  /* ── Divisória de montanhas ───────────────────────────────
+     Sangra para fora do container de 1300px de propósito: uma serra que
+     parasse no meio da tela não seria uma divisória. É a terceira exceção
+     à régua do container, junto com o marquee e o Hero.
+
+     `display: block` no SVG e `vertical-align: bottom` eliminam o vão de
+     ~4px que a linha de base do inline deixaria embaixo. A altura é fluida
+     para a serra não achatar no mobile nem dominar no desktop. */
+  .divisoria {
+    display: block;
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .divisoria svg {
+    display: block;
+    vertical-align: bottom;
+    width: 100%;
+    height: clamp(3.5rem, 7vw, 7rem);
+  }
+
+  /* `scaleY(-1)` e não `rotate(180deg)`: o rotate espelharia também na
+     horizontal, e as duas serras (topo e base do Canicross) ficariam com o
+     mesmo perfil invertido, denunciando a repetição. Só na vertical, o
+     desenho da crista continua diferente de um lado para o outro. */
+  .divisoria-invertida svg {
+    transform: scaleY(-1);
+  }
+
+  /* ── Marquee infinito ─────────────────────────────────────
+     O conteúdo é duplicado no markup; a animação desloca exatamente 50%,
+     então o ponto de retorno coincide com o início da segunda cópia e o
+     loop fica imperceptível. Pausa no hover. */
+  .marquee {
+    @apply relative flex overflow-hidden;
+    /* max-width impede que os tracks (bem mais largos que a tela) estiquem
+       o container e criem scroll horizontal no mobile. */
+    width: 100%;
+    max-width: 100vw;
+    /* Esmaece as pontas para o corte não parecer abrupto. */
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+  .marquee-track {
+    @apply flex w-max shrink-0 items-center gap-8;
+    /* O padding fecha o ritmo na emenda: sem ele o último item de uma cópia
+       encostaria no primeiro da seguinte, já que o `gap` só separa itens
+       DENTRO do track. Com ele, o espaçamento é igual em toda a faixa. */
+    padding-right: 2rem;
+    animation: marquee-scroll var(--marquee-duration, 42s) linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Texto que se revela palavra a palavra no scroll (scrollytelling).
+     O estado inicial fica no JS, que fatia o texto em <span>. */
+  .reveal-text {
+    text-wrap: balance;
+  }
+
+  /* ── Trilho horizontal ────────────────────────────────────
+     Fica DENTRO do .container-wide, mas sangra até a borda da tela usando
+     margens negativas calculadas a partir do próprio container. O primeiro
+     card nasce alinhado à coluna de texto; só o excedente vaza para fora.
+     Assim o container de 1300px continua sendo a régua da página. */
+  .scroll-rail {
+    @apply overflow-x-auto overflow-y-hidden;
+    /* O trilho respeita o container de 1300px: o excedente é recortado na
+       régua, não sangra até a borda da tela. Era assim antes, e a cliente
+       pediu tudo dentro do container. */
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    /* Espaço para a sombra dos cards não ser cortada na vertical. */
+    padding-block: 0.75rem;
+  }
+
+  /* Arrastar com o mouse: sem isto o navegador entende o gesto como seleção
+     de texto (ou como drag da imagem) e fica com ele — o ponteiro anda e o
+     trilho não. É a causa de "não dá para arrastar no desktop", e não
+     aparece em teste automatizado: mouse sintético não seleciona texto. */
+  .scroll-rail[data-rail-drag] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .scroll-rail[data-rail-drag] img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  /* Trilho conduzido pelo scroll da página: quem o move é o ScrollTrigger,
+     não o dedo. `touch-action: pan-y` deixa o gesto vertical passar direto
+     para a página — sem isto, arrastar sobre os cards no celular rolava o
+     trilho por fora do pin e os dois brigavam pela mesma posição.
+     O snap sai pelo mesmo motivo: ele puxaria o trilho de volta. */
+  /* Só a partir de 1024px, que é onde o pin existe (ver `mm.add` em
+     ScrollAnimations). Abaixo disso o trilho é de toque comum, e
+     `touch-action: pan-y` BLOQUEARIA o deslize horizontal dos cards —
+     o dedo não conseguiria passar de um card para o outro. */
+  @media (min-width: 1024px) {
+    .scroll-rail[data-rail-pin] {
+      touch-action: pan-y;
+      scroll-snap-type: none;
+    }
+  }
+
+  /* Nada de margem/padding de sangria aqui: todos os trilhos terminam na
+     régua do container. Isto também faz o percurso do pin (Serviços) acabar
+     com o último card alinhado ao container, e não na borda da tela. */
+
+  .scroll-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-rail-track {
+    @apply flex gap-5;
+  }
+
+  .scroll-rail-item {
+    @apply flex-shrink-0;
+    scroll-snap-align: start;
+  }
+
+  /* Indicador de progresso do trilho (barra fina sob o slider). */
+  .rail-progress {
+    @apply relative h-px w-full overflow-hidden bg-border;
+  }
+  .rail-progress span {
+    @apply absolute inset-y-0 bg-primary;
+    left: 0;
+    width: var(--rail-progress, 12%);
+  }
+
+  /* ── Sticky stacking ──────────────────────────────────────
+     Cards que grudam no topo e se empilham conforme o scroll avança.
+     Cada card recebe --stack-i via style inline para escalonar o offset.
+
+     Vale em todas as larguras: no mobile o efeito é o mesmo, só com o
+     `top` menor, porque lá o header é mais baixo.
+
+     O <li> gruda; o espaço entre eles é o curso do scroll.
+
+     **O `z-index` crescente é o que impede o card 05 de reaparecer por
+     baixo do 06 no fim da rolagem.** Quando a pilha se solta, os cards
+     voltam ao fluxo e por alguns pixels ficam desalinhados. Não adianta dar
+     mais curso de rolagem: medido, o desencaixe acontece sempre ~300px
+     antes de a seção sair (a profundidade da pilha, 120px, mais a altura de
+     um card, 179px), e aumentar o `::after` empurra o ponto de saída junto
+     — a folga não fecha nunca. Com o z-index, o card de cima cobre o de
+     baixo e o desalinhamento deixa de ser visível.
+
+     O espaçamento entre os cards vem do `space-y` no markup — NÃO adicionar
+     `gap` aqui, senão os dois somam e os cards se afastam (já aconteceu). */
+  .stack-card {
+    position: sticky;
+    /* No mobile o header mede ~80px: 5.5rem cola o card logo abaixo dele
+       sem encostar. O degrau é menor porque o `space-y-8` do mobile (2rem)
+       é menor que o `space-y-10` do desktop. */
+    top: calc(5.5rem + var(--stack-i, 0) * 1rem);
+    z-index: calc(var(--stack-i, 0) + 1);
+    height: fit-content;
+  }
+
+  .stack-list::after {
+    content: "";
+    display: block;
+    height: 60vh;
+  }
+
+  @media (min-width: 1024px) {
+    .stack-card {
+      /* O degrau casa com o espaço entre os cards (`space-y-10` = 2.5rem).
+         Enquanto um card gruda e o seguinte ainda desce, a faixa visível de
+         cada um é `degrau` de um lado e `vão - degrau` do outro. Com degrau
+         pequeno (0.75rem) essas faixas ficavam 12px e 100px: o card que
+         estava grudando quase sumia atrás do anterior enquanto os de baixo
+         mantinham o vão cheio, e o espaçamento parecia quebrado no meio da
+         rolagem. Com o degrau em metade do vão as duas faixas se igualam e
+         a transição fica homogênea. */
+      top: calc(7rem + var(--stack-i, 0) * 1.25rem);
+    }
+  }
+
+  /* ── Carrossel (Swiper) ───────────────────────────────────
+     Vive aqui, e não no <style> do Carousel.astro, porque os slides chegam
+     por <slot>: o CSS escopado do componente não alcança conteúdo de slot,
+     e as regras acabavam descartadas no build. Sem elas, os slides ficam
+     empilhados na vertical e a seção vira um retângulo altíssimo. */
+  .natu-carousel-outer {
+    /* Sem margens negativas: combinadas com overflow e com o transform do
+       Swiper, elas realimentavam o cálculo de largura. */
+    position: relative;
+    min-width: 0;
+    max-width: 100%;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Itens de grid e flex têm min-width:auto por padrão, o que os deixa
+     crescer com o conteúdo. Um carrossel dentro de uma coluna precisa que
+     a coluna imponha a largura, não o contrário. */
+  .natu-carousel-outer,
+  .natu-carousel-outer > * {
+    min-width: 0;
+  }
+
+  .natu-carousel {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    /* overflow: hidden (e não visible) é essencial: com visible, a largura
+       dos slides realimenta a do wrapper e o Chrome estoura no limite de
+       layout (2^25 px), quebrando a altura da página inteira. */
+    overflow: hidden;
+  }
+
+  .natu-carousel .swiper-wrapper {
+    display: flex;
+    /* Sem width aqui: quem define é o Swiper via transform. */
+    box-sizing: content-box;
+  }
+
+  /* Antes de o Swiper inicializar, só o primeiro slide fica visível. */
+  .natu-carousel:not(.swiper-initialized) .swiper-wrapper {
+    overflow: hidden;
+    max-height: 80vh;
+  }
+
+  .natu-carousel .swiper-slide {
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 0;
+    /* Corta o ciclo: sem min-width:0 o conteúdo intrínseco (a imagem
+       dentro de um box com aspect-ratio) define a largura do slide, que
+       define a do wrapper, que redefine a do slide — até o Chrome estourar
+       em 2^25 px e a página inteira perder a altura. */
+    min-width: 0;
+  }
+
+  /* A imagem nunca dita a largura: ela se ajusta ao box do slide. */
+  .natu-carousel .swiper-slide img {
+    max-width: 100%;
+    min-width: 0;
+    /* Imagem é nativamente arrastável: sem isto o navegador inicia o
+       drag-and-drop da própria imagem, engole o pointermove e o Swiper
+       nunca vê o gesto — o carrossel parecia travado no arrasto, embora
+       as setas funcionassem. O `draggable="false"` no HTML cobre o resto. */
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  .natu-carousel {
+    cursor: grab;
+    /* Mesma razão do `.scroll-rail[data-rail-drag]`: arrastar sobre o
+       conteúdo do slide iniciava a seleção de texto, que fica com o gesto e
+       o Swiper não recebe o pointermove. */
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .natu-carousel.swiper-grabbing,
+  .natu-carousel:active {
+    cursor: grabbing;
+  }
+
+  /* Botões de navegação */
+  .natu-carousel-prev,
+  .natu-carousel-next {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    display: flex;
+    width: 46px;
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    border: 1px solid color-mix(in srgb, white 70%, transparent);
+    border-radius: 9999px;
+    /* Fundo sólido, não translúcido: sobre foto clara o botão de vidro
+       sumia e o carrossel parecia não ter navegação nenhuma. */
+    background: color-mix(in srgb, var(--color-dark) 78%, transparent);
+    color: #fff;
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--color-dark) 38%, transparent);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: background-color 0.25s, transform 0.25s, border-color 0.25s;
+  }
+  .natu-carousel-prev:hover,
+  .natu-carousel-next:hover {
+    border-color: #fff;
+    background-color: var(--color-primary);
+    transform: translateY(-50%) scale(1.06);
+  }
+  .natu-carousel-prev:focus-visible,
+  .natu-carousel-next:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 3px;
+  }
+  /* Swiper marca o botão quando não há para onde ir (loop desligado). */
+  .natu-carousel .swiper-button-disabled {
+    pointer-events: none;
+    opacity: 0.35;
+  }
+  .natu-carousel-prev {
+    left: 12px;
+  }
+  .natu-carousel-next {
+    right: 12px;
+  }
+
+  /* ── Cursor customizado ───────────────────────────────────
+     Etiqueta que segue o ponteiro sobre [data-cursor-area].
+     Vive no <body> em position: fixed — dentro do trilho, um elemento
+     posicionado aumentaria a área rolável e esticaria a seção. */
+  .cursor-dot {
+    @apply pointer-events-none fixed left-0 top-0 z-50 flex items-center justify-center rounded-full px-4 py-2 font-sans text-xs uppercase tracking-[0.12em] text-white;
+    background: color-mix(in srgb, var(--color-primary) 92%, transparent);
+    opacity: 0;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  /* Divisor sutil entre blocos internos de uma mesma seção. */
+  .rule-soft {
+    @apply h-px w-full border-0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-border) 90%, transparent),
+      transparent
+    );
+  }
+}
+
+/* -100% = a largura de UMA cópia. Como os dois tracks são idênticos e
+   encostados (o container não tem gap entre eles — o `gap-8` é ENTRE os
+   itens, dentro de cada track), no fim do ciclo a segunda cópia está
+   exatamente onde a primeira começou e o loop é imperceptível.
+
+   Havia um `- 2rem` aqui somando um gap que não existe: a animação andava
+   32px a mais por volta e dava um salto visível a cada ciclo. */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* A faixa não para com `reduce`: desacelera para menos da metade. Parar
+   deixava uma frase cortada no meio da tela, imóvel, parecendo bug — que é
+   exatamente como foi reportado. Movimento lento e constante comunica que
+   aquilo é uma faixa, sem o desconforto de um movimento rápido. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation-duration: calc(var(--marquee-duration, 42s) * 2.6);
+  }
+}

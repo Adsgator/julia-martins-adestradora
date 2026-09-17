@@ -1,0 +1,131 @@
+---
+import { Image } from "astro:assets";
+import logoJulia from "../assets/images/logo-julia.webp";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const currentYear = new Date().getFullYear();
+
+// TODO(cliente): o briefing informou apenas "juliamartinsadestradora", sem
+// domínio. Substituir pelo e-mail real assim que a Júlia confirmar.
+const EMAIL_CONTATO = "contato@juliamartinsadestradora.com.br";
+---
+
+<BaseLayout
+  title="Política de Privacidade | Julia Martins Adestradora"
+  description="Política de privacidade do site de Julia Martins Adestradora. Conformidade com a LGPD."
+  canonical="https://juliamartinsadestradora.com.br/politica-de-privacidade"
+  noindex
+>
+  <main id="main-content" class="bg-background">
+    <section class="legal-shell">
+      <div class="glass-header mb-8 flex items-center justify-between gap-4 rounded-[24px] px-4 py-3 sm:px-5 sm:py-3.5 lg:rounded-[28px] lg:px-6">
+        <a href="/" aria-label="Ir para o início" class="flex shrink-0 items-center">
+          <Image
+            src={logoJulia}
+            alt="Julia Martins Adestramento"
+            class="h-10 w-auto sm:h-12"
+            width={360}
+            height={151}
+            loading="eager"
+          />
+        </a>
+        <a
+          href="/"
+          class="inline-flex items-center justify-center rounded-full border border-white/18 bg-white/8 px-5 py-2.5 font-sans text-body-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/14 hover:text-white"
+        >
+          Voltar
+        </a>
+      </div>
+
+      <article class="legal-card">
+        <h1 class="legal-title">Política de Privacidade</h1>
+        <p class="legal-subtitle">
+          Última atualização: {new Date().toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
+        </p>
+
+        <p class="legal-copy">
+          Esta Política de Privacidade descreve como <strong class="text-text-main">Júlia Martins</strong>,
+          responsável pelo site
+          <strong class="text-text-main">juliamartinsadestradora.com.br</strong>,
+          coleta, usa e protege as informações dos usuários, em conformidade com a Lei Geral de
+          Proteção de Dados (LGPD — Lei nº 13.709/2018).
+        </p>
+
+        <h2 class="legal-heading">1. Dados coletados</h2>
+        <p class="legal-copy">Coletamos os seguintes dados ao navegar neste site:</p>
+        <ul class="legal-copy ml-6 list-disc space-y-2">
+          <li>Dados de navegação via Google Analytics, quando o usuário consente.</li>
+          <li>Dados fornecidos voluntariamente ao clicar em links de contato pelo WhatsApp.</li>
+        </ul>
+        <p class="legal-copy">
+          Não coletamos dados sensíveis como CPF, dados bancários ou informações de saúde
+          diretamente por este site.
+        </p>
+
+        <h2 class="legal-heading">2. Finalidade do uso</h2>
+        <ul class="legal-copy ml-6 list-disc space-y-2">
+          <li>Melhorar a experiência de navegação com base em dados agregados de acesso.</li>
+          <li>Mensurar o desempenho de campanhas de marketing digital.</li>
+          <li>Responder a dúvidas e solicitações de contato enviadas voluntariamente.</li>
+        </ul>
+
+        <h2 class="legal-heading">3. Base legal</h2>
+        <p class="legal-copy">
+          O tratamento dos dados é baseado no consentimento do usuário (Art. 7º, I da LGPD),
+          que pode ser retirado a qualquer momento por meio do banner de cookies ou pelo contato
+          informado abaixo.
+        </p>
+
+        <h2 class="legal-heading">4. Cookies</h2>
+        <p class="legal-copy">
+          Utilizamos cookies de análise e publicidade, ativados apenas após o consentimento
+          expresso do usuário. Cookies estritamente necessários para o funcionamento do site
+          permanecem ativos.
+        </p>
+
+        <h2 class="legal-heading">5. Compartilhamento de dados</h2>
+        <p class="legal-copy">Seus dados podem ser compartilhados com:</p>
+        <ul class="legal-copy ml-6 list-disc space-y-2">
+          <li>Google LLC, para mensuração e mídia.</li>
+          <li>Hostinger, como provedora de hospedagem do site.</li>
+        </ul>
+        <p class="legal-copy">Não vendemos nem cedemos seus dados a terceiros para fins comerciais.</p>
+
+        <h2 class="legal-heading">6. Seus direitos</h2>
+        <p class="legal-copy">De acordo com a LGPD, você tem direito a:</p>
+        <ul class="legal-copy ml-6 list-disc space-y-2">
+          <li>Confirmar a existência de tratamento de seus dados.</li>
+          <li>Acessar, corrigir ou solicitar a exclusão dos seus dados.</li>
+          <li>Revogar o consentimento a qualquer momento.</li>
+          <li>Solicitar a portabilidade dos dados.</li>
+        </ul>
+        <p class="legal-copy">
+          Para exercer seus direitos, entre em contato:
+          <a href={`mailto:${EMAIL_CONTATO}`} class="text-primary hover:underline">
+            {EMAIL_CONTATO}
+          </a>
+        </p>
+
+        <h2 class="legal-heading">7. Segurança</h2>
+        <p class="legal-copy">
+          Adotamos medidas técnicas e administrativas adequadas para proteger seus dados pessoais
+          contra acesso não autorizado, perda ou destruição.
+        </p>
+
+        <h2 class="legal-heading">8. Contato</h2>
+        <p class="legal-copy">
+          Júlia Martins<br />
+          E-mail:
+          <a href={`mailto:${EMAIL_CONTATO}`} class="text-primary hover:underline">
+            {EMAIL_CONTATO}
+          </a><br />
+          WhatsApp: (12) 98266-8716
+        </p>
+      </article>
+
+      <p class="mt-8 text-center font-sans text-body-sm text-text-muted">
+        © {currentYear} Julia Martins Adestradora
+      </p>
+    </section>
+  </main>
+</BaseLayout>

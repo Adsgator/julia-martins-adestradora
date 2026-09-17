@@ -1,0 +1,112 @@
+---
+// "Como eu trabalho" — os 6 pilares em sticky stacking.
+//
+// Técnica: cada pilar gruda no topo e o seguinte sobe por cima, criando um
+// baralho. O visitante lê um de cada vez, no ritmo do scroll, em vez de
+// varrer seis cards de uma vez. A coluna da esquerda fica fixa ao lado.
+//
+// Tudo dentro do container de 1300px.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import juliaFoco from "../../assets/images/julia-foco.webp";
+
+const pilares = [
+  {
+    icone: "lucide:heart-handshake",
+    titulo: "Vínculo",
+    texto: "Uma relação de confiança é a base para uma comunicação eficiente.",
+  },
+  {
+    icone: "lucide:messages-square",
+    titulo: "Comunicação",
+    texto: "Aprender a interpretar o cão e ensinar o cão a compreender o que esperamos dele.",
+  },
+  {
+    icone: "lucide:shield-check",
+    titulo: "Limites",
+    texto: "Liberdade e convivência também precisam de regras claras e consistentes.",
+  },
+  {
+    icone: "lucide:sliders-horizontal",
+    titulo: "Manejo",
+    texto:
+      "Nem todo problema se resolve com um comando. O ambiente e a rotina também fazem parte do treinamento.",
+  },
+  {
+    icone: "lucide:fingerprint",
+    titulo: "Individualidade",
+    texto: "Cada cão aprende em um ritmo e responde de uma maneira diferente.",
+  },
+  {
+    icone: "lucide:trees",
+    titulo: "Vida real",
+    texto: "O objetivo não é um cão perfeito na aula. É melhorar a convivência fora dela.",
+  },
+];
+---
+
+<section id="como-trabalho" class="section-py bg-surface">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <!-- Coluna fixa: título + imagem acompanham o empilhamento -->
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <span class="label-tag mb-5 inline-block" data-animate>Como eu trabalho</span>
+
+        <h2
+          class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+          data-animate
+        >
+          Educação antes da <span class="text-primary">obediência.</span>
+        </h2>
+
+        <p class="mt-5 max-w-prose font-sans text-body-base text-text-soft" data-animate>
+          Cada cão tem uma história, personalidade e forma de aprender. Por isso não trabalho com
+          fórmula pronta: o treinamento é construído sobre seis pontos.
+        </p>
+
+        {/* Retrato (4:5) e não 4:3: a coluna esquerda é a estreita do grid
+            (0.8fr), e na horizontal a foto ficava baixa demais ao lado do
+            baralho de cards. */}
+        <div class="frame-editorial mt-8 hidden aspect-[4/5] lg:block" data-animate>
+          <Image
+            src={juliaFoco}
+            alt="Cão atento à condução durante um exercício de foco"
+            class="h-full w-full object-cover"
+            width={900}
+            height={1125}
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      <!-- Baralho de pilares: o espaço entre eles é o curso do scroll em
+           que cada card fica grudado antes do próximo subir por cima. -->
+      <ol class="stack-list space-y-8 lg:space-y-10">
+        {
+          pilares.map((pilar, indice) => (
+            <li class="stack-card" style={`--stack-i: ${indice}`}>
+              <article class="flex gap-5 rounded-[1.5rem] border border-border bg-background p-7 shadow-float sm:p-8">
+                <span class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary/8 text-primary">
+                  <Icon name={pilar.icone} class="h-6 w-6" />
+                </span>
+
+                <div>
+                  <span class="font-sans text-body-sm font-semibold tabular-nums text-secondary-text">
+                    {String(indice + 1).padStart(2, "0")}
+                  </span>
+                  <h3 class="mt-1 font-serif text-display-sm font-bold text-text-main">
+                    {pilar.titulo}
+                  </h3>
+                  <p class="mt-2 max-w-prose font-sans text-body-base text-text-soft">
+                    {pilar.texto}
+                  </p>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

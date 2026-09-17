@@ -1,0 +1,79 @@
+---
+// Sobre a Júlia — bloco 4 do roteiro, condensado.
+//
+// O roteiro traz a história em 14 frases curtas. Reproduzir todas deixava
+// um paredão de texto; aqui a narrativa fica em três parágrafos, com a
+// frase-chave destacada, e as fotos entram em carrossel ao lado.
+
+import { Image } from "astro:assets";
+import juliaConducao from "../../assets/images/julia-conducao.webp";
+import juliaOrientando from "../../assets/images/julia-orientando.webp";
+import juliaRetrato from "../../assets/images/julia-retrato.webp";
+import juliaTrabalho from "../../assets/images/julia-trabalho.webp";
+import Carousel from "../global/Carousel.astro";
+
+const fotos = [
+  { src: juliaRetrato, alt: "Júlia Martins durante um atendimento" },
+  { src: juliaTrabalho, alt: "Júlia trabalhando com um cão em treinamento" },
+  { src: juliaConducao, alt: "Júlia conduzindo um cão no passeio" },
+  { src: juliaOrientando, alt: "Júlia orientando uma tutora durante a aula" },
+];
+---
+
+<section id="sobre" class="section-py bg-background">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
+      <div class="min-w-0">
+        <Carousel id="sobre-fotos" slidesPerView={1} spaceBetween={16} loop navigation autoplayDelay={5500}>
+          {
+            fotos.map((foto) => (
+              <div class="swiper-slide">
+                <div class="frame-editorial aspect-[3/4]">
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    class="h-full w-full object-cover"
+                    width={900}
+                    height={1200}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </Carousel>
+      </div>
+
+      <div>
+        <span class="label-tag mb-5 inline-block" data-animate>Sobre a Júlia</span>
+
+        <h2
+          class="font-serif text-display-xl font-bold text-text-main [text-wrap:balance]"
+          data-animate
+        >
+          Antes de ensinar cães, eu quis
+          <span class="text-primary">aprender a entendê-los.</span>
+        </h2>
+
+        <div class="mt-6 max-w-prose space-y-4 font-sans text-body-lg text-text-soft">
+          <p data-animate>
+            Minha trajetória começou pelo adestramento. Com o tempo, quanto mais cães eu treinava,
+            mais percebia que ensinar comandos era apenas uma parte do trabalho.
+          </p>
+
+          <p class="font-serif text-display-sm font-semibold text-secondary-text" data-animate>
+            Um cão não existe dentro de uma aula. Ele existe dentro de uma casa, de uma família, de
+            uma rotina.
+          </p>
+
+          <p data-animate>
+            Foi essa percepção que fez meu trabalho evoluir. Passei a olhar para comportamento,
+            linguagem corporal, manejo, socialização, descanso, rotina e para a participação dos
+            donos no processo. Hoje ensino cães e, principalmente, ensino pessoas a se comunicarem
+            melhor com eles.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

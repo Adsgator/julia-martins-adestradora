@@ -1,0 +1,143 @@
+---
+// Parceria Fórmula Natural — recuperada do site antigo a pedido da cliente.
+//
+// **Esta é a única seção que foge da paleta do site.** É deliberado, a pedido
+// da cliente: o azul da marca parceira destaca o bloco do resto da página e
+// sinaliza que ali fala outra marca. O azul é o `#0084AF` do layout antigo
+// (Deep Cerulean), declarado localmente porque é cor de terceiro — não entra
+// em `tokens.css` para não virar opção na paleta da Júlia.
+//
+// Consequência de fugir da paleta: nada aqui pode usar `text-text-*` nem
+// `bg-surface`, que assumem fundo creme. Os textos são brancos com opacidade,
+// e o CTA usa o caramelo da marca da Júlia, que funciona sobre o azul.
+//
+// O texto é o do site antigo, com quebras de frase ajustadas — o original
+// vinha num parágrafo só, cheio de vírgulas encadeadas.
+
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import formula01 from "../../assets/images/formula-01.webp";
+import formula02 from "../../assets/images/formula-02.webp";
+import formula03 from "../../assets/images/formula-03.webp";
+import formula04 from "../../assets/images/formula-04.webp";
+import logoFormula from "../../assets/images/logo-formula-natural.webp";
+import Carousel from "../global/Carousel.astro";
+
+const fotos = [
+  {
+    src: formula01,
+    alt: "Júlia com um cão durante um atendimento, usando uniforme Fórmula Natural",
+  },
+  { src: formula02, alt: "Júlia em ação de parceria com a Fórmula Natural" },
+  { src: formula03, alt: "Treino com uso de petiscos como recompensa" },
+  { src: formula04, alt: "Júlia representando a Fórmula Natural em evento" },
+];
+---
+
+<section id="formula-natural" class="secao-formula section-py">
+  <div class="container-wide">
+    <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+      <div>
+        <span class="formula-tag mb-5 inline-block" data-animate>Parceria</span>
+
+        <!-- Placa clara: o logo é escuro e sem fundo próprio -->
+        <div class="mb-6 flex w-fit items-center rounded-2xl bg-white px-5 py-4" data-animate>
+          <Image
+            src={logoFormula}
+            alt="Fórmula Natural"
+            class="h-11 w-auto object-contain sm:h-12"
+            width={450}
+            height={214}
+            loading="lazy"
+          />
+        </div>
+
+        <h2 class="font-serif text-display-xl font-bold text-white [text-wrap:balance]" data-animate>
+          Parceria com quem entende de
+          <span class="text-formula-claro">nutrição canina.</span>
+        </h2>
+
+        <div class="mt-5 max-w-prose space-y-4 font-sans text-body-lg text-white/85">
+          <p data-animate>
+            Acredito que o melhor aprendizado vem do incentivo certo. Por isso, trabalho com a
+            Fórmula Natural: petiscos de alta qualidade que recompensam, nutrem e motivam.
+          </p>
+
+          <p data-animate>
+            Assim, cada treino se torna uma experiência prazerosa, fortalecendo o vínculo entre tutor
+            e cão e cuidando da saúde física e emocional do seu melhor amigo.
+          </p>
+        </div>
+
+        <p class="mt-7 flex items-center gap-2 font-sans text-body-sm text-white/70" data-animate>
+          <Icon name="lucide:heart-handshake" class="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          Reforço positivo com petiscos de qualidade
+        </p>
+      </div>
+
+      <div class="min-w-0">
+        <Carousel id="formula-fotos" slidesPerView={1} spaceBetween={16} loop navigation>
+          {
+            fotos.map((foto) => (
+              <div class="swiper-slide">
+                <div class="frame-editorial aspect-[4/5]">
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    class="h-full w-full object-cover"
+                    width={1200}
+                    height={1500}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))
+          }
+        </Carousel>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Cor da marca parceira, escopada nesta seção. Fica fora de `tokens.css`
+     de propósito: é cor de terceiro, não faz parte da identidade da Júlia. */
+  .secao-formula {
+    --formula-azul: #0084af;
+    --formula-azul-fundo: #00719a;
+    background-color: var(--formula-azul);
+    /* Textura sutil para o azul chapado não ficar plano numa área grande. */
+    background-image: radial-gradient(
+        circle at 12% 8%,
+        rgba(255, 255, 255, 0.11),
+        transparent 45%
+      ),
+      linear-gradient(170deg, var(--formula-azul), var(--formula-azul-fundo));
+  }
+
+  .secao-formula :global(.text-formula-claro) {
+    color: #bfe9f7;
+  }
+
+  /* Equivalente ao `.label-tag`, mas legível sobre o azul: as linhas
+     laterais e o texto do original usam o caramelo, que some aqui. */
+  .formula-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-label);
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .formula-tag::before,
+  .formula-tag::after {
+    content: "";
+    height: 1px;
+    width: 2rem;
+    background-color: rgba(255, 255, 255, 0.45);
+  }
+</style>
