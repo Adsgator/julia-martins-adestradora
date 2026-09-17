@@ -850,6 +850,10 @@ html.lenis body {
   transform: translateY(20px);
 }
 
+/* ATENÇÃO: este `transform: none !important` vence qualquer `style.transform`
+   inline. Elemento cuja POSIÇÃO é controlada por JS (o header que esconde ao
+   rolar, por exemplo) não pode usar `data-animate*` — sob `reduce` o JS escreve
+   e o CSS descarta, em silêncio. Anime um filho, não o elemento posicionado. */
 @media (prefers-reduced-motion: reduce) {
   [data-animate],
   [data-animate-left],

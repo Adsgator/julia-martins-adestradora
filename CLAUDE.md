@@ -433,7 +433,7 @@ comportamento desejado.
 proposital: eles não são decoração, são como o conteúdo é navegado — com o
 pin desligado, os cards 4 a 7 de Serviços ficam inalcançáveis.
 
-Isso já causou bug reportado **três vezes**, sempre igual: o
+Isso já causou bug reportado **quatro vezes**. Nas três primeiras, sempre igual: o
 `ScrollAnimations` dá `return` cedo quando `prefersReduced`, e o bloco
 ficava depois desse `return`. Na máquina do cliente (Windows com "Mostrar
 animações" desligado) o recurso simplesmente não existia.
@@ -445,6 +445,28 @@ movimento reduzido. Parecia "arraste não funciona no desktop".
 
 Hoje **`setupPinnedRails()` e `setupRails()` (arraste + barra + cursor) são
 chamados nos dois caminhos**, e as duas definições ficam antes do `return`.
+
+**A quarta foi o header que não escondia — e por outro vetor.** Não era o
+`return` do `ScrollAnimations`: era o CSS. O `<header>` tinha
+`data-animate="header"`, e a regra de `global.css`
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] { transform: none !important; }
+}
+```
+
+vence a declaração **inline** que o script do header escreve. Medido na
+máquina da cliente: `style.transform = "translateY(-100%)"` e
+`getComputedStyle().transform === "none"`. O JS fazia tudo certo e o CSS
+descartava, em silêncio.
+
+Hoje o `data-animate` fica no `<nav>` de dentro, nunca no `<header>`: o
+wrapper posicionado é do JS, a caixa que anima na entrada é do GSAP.
+
+> **A regra geral:** elemento cuja POSIÇÃO é controlada por JS não pode usar
+> `data-animate*`. Os dois disputam o mesmo `transform`, e sob `reduce` o
+> `!important` sempre ganha. Anime um filho.
 
 > A máquina do cliente tem "Mostrar animações" desligado, e **é bom que
 > tenha**: é o melhor detector desta classe de bug. Não peça para ligar.

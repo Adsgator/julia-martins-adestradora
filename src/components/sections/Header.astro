@@ -21,10 +21,15 @@ const navLinks = [
 ];
 ---
 
+<!-- O `data-animate` fica no <nav>, NUNCA no <header>. Os dois disputariam o
+     mesmo `transform`: sob `prefers-reduced-motion: reduce` a regra
+     `[data-animate] { transform: none !important }` de global.css vence a
+     declaração inline e o esconder-ao-rolar simplesmente não acontecia na
+     máquina da cliente (Windows com "Mostrar animações" desligado).
+     Medido: inline="translateY(-100%)" e computed="none". -->
 <header
   id="main-header"
   class="fixed left-0 right-0 top-0 z-50 pt-3 transition-all duration-300 sm:pt-4"
-  data-animate="header"
 >
   <!-- Sem padding horizontal próprio e sem `max-w` na nav: quem define a
        largura é o `.container-wide`, para o header bater exatamente com o
@@ -32,6 +37,7 @@ const navLinks = [
   <div class="container-wide">
     <nav
       class="glass-header flex items-center justify-between rounded-[24px] px-3.5 py-3 sm:px-5 sm:py-3.5 lg:rounded-[28px] lg:px-6"
+      data-animate="header"
     >
       <a
         href="#hero-section"
@@ -125,25 +131,56 @@ const navLinks = [
     const header = document.getElementById("main-header");
     if (!header) return;
 
+    // Só esconde depois que a página sai do Hero. O Hero mede de 620 a 1080px
+    // conforme a viewport (`svh`), então o limite é MEDIDO, não um número fixo:
+    // com os antigos 200px o header sumia ainda dentro do Hero.
+    // Nas páginas legais não existe Hero — ali vale a folga fixa, para o header
+    // não sumir logo no primeiro gesto.
+    // O Hero é procurado DENTRO da função, não aqui fora: este script é
+    // `is:inline` e roda durante o parse do <header>, quando a seção
+    // `#hero-section` ainda não existe no DOM. Guardar a referência agora
+    // congelaria `null` na closure e o limite nunca sairia da folga fixa —
+    // o header voltava a sumir dentro do Hero, aos 200px.
+    const FOLGA_SEM_HERO = 200;
+    let limiteEsconder = FOLGA_SEM_HERO;
+
+    function medirLimite() {
+      const hero = document.getElementById("hero-section");
+      if (!hero) return;
+      // Posição absoluta do fim do Hero no documento. Remedida no resize
+      // porque `svh` muda quando a barra do navegador mobile recolhe.
+      limiteEsconder = window.scrollY + hero.getBoundingClientRect().bottom;
+    }
+
     let lastScrollY = window.scrollY;
     let ticking = false;
 
     function updateHeader() {
       const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY;
 
-      if (currentScrollY > 100) {
-        if (currentScrollY > lastScrollY && currentScrollY > 200) {
+      // Margem de 4px: a inércia do Lenis produz micro-oscilações de direção
+      // que, sem ela, fariam o header piscar ao parar a rolagem.
+      if (Math.abs(delta) > 4) {
+        if (delta > 0 && currentScrollY > limiteEsconder) {
           header.style.transform = "translateY(-100%)";
-        } else {
+        } else if (delta < 0) {
           header.style.transform = "translateY(0)";
         }
-      } else {
+        lastScrollY = currentScrollY;
+      }
+
+      if (currentScrollY <= limiteEsconder) {
         header.style.transform = "translateY(0)";
       }
 
-      lastScrollY = currentScrollY;
       ticking = false;
     }
+
+    medirLimite();
+    document.addEventListener("DOMContentLoaded", medirLimite);
+    window.addEventListener("resize", medirLimite, { passive: true });
+    window.addEventListener("load", medirLimite);
 
     window.addEventListener(
       "scroll",
