@@ -67,10 +67,10 @@ A cliente quer que esta página seja **uma extensão da Natu**, mantendo conexã
 visual sem ser a mesma página.
 
 **Herdado da Natu (não mexer):** fonte serifada Gliker, sistema de tokens `--t-*`,
-classes utilitárias de `global.css`, verde-escuro `#1e432c`, fundo creme.
+classes utilitárias de `global.css`, verde-escuro `#1e432c`, fundo creme, e desde
+2026-09-23 também o laranja de marca `#f47a20` (`--t-secondary`) — ver nota abaixo.
 
 **Próprio da Julia (a diferenciação):**
-- `--t-secondary` é caramelo `#b5793f`, não o laranja `#f47a20` da Natu
 - Fundo creme mais claro (`#faf8f3`) e mais respiro entre blocos
 - Hero de retrato em duas colunas, não banner de paisagem
 - Ritmo editorial: `max-w-prose` nos textos, grid assimétrico
@@ -79,6 +79,14 @@ classes utilitárias de `global.css`, verde-escuro `#1e432c`, fundo creme.
 > **Essa parte foi descartada por decisão do cliente**: conflita com o parentesco
 > visual com a Natu. Não reintroduzir.
 
+> **`--t-secondary` já foi caramelo `#b5793f`, de propósito, para diferenciar
+> da Natu.** A cliente aprovou o site e depois pediu para reverter: "manter a
+> mesma identidade da Natu" (2026-09-23). Hoje `--t-secondary` é o mesmo
+> `#f47a20` da Natu, igual em `:root` e em `.dark`. **Não reintroduzir o
+> caramelo como cor de marca** — foi voltar atrás por pedido explícito, não
+> um erro a corrigir. `--t-secondary-text` (`#9a6533`) continua caramelo de
+> propósito: é só o token de texto pequeno, ver "Dois caramelos" abaixo.
+
 ---
 
 ## Tokens — nunca hardcode
@@ -86,23 +94,28 @@ classes utilitárias de `global.css`, verde-escuro `#1e432c`, fundo creme.
 Todo valor visual vem de `tokens.css`. Use o utilitário Tailwind (`bg-primary`,
 `text-text-main`, `font-serif`) ou `var(--t-...)` em CSS escopado.
 
-### Dois caramelos, e o motivo
+### Um laranja e um caramelo, e o motivo de cada um
 
 | Token | Valor | Onde |
 |---|---|---|
-| `--t-secondary` | `#b5793f` | A cor da marca. Botão, borda, ícone, título grande, destaque dentro de H2 |
-| `--t-secondary-text` | `#9a6533` | **Só texto pequeno em caramelo** |
+| `--t-secondary` | `#f47a20` (laranja, igual à Natu) | A cor da marca. Botão, borda, ícone, título grande, destaque dentro de H2 |
+| `--t-secondary-text` | `#9a6533` (caramelo) | **Só texto pequeno**, à parte da cor de marca |
 
-Sobre o creme, `#b5793f` mede **3,43:1**. Isso passa nos 3:1 que a WCAG pede
-para texto grande, e reprova nos 4,5:1 de texto normal. Os quatro lugares em
-que o caramelo carregava texto miúdo — `.label-tag`, os numerais "01" de Como
-eu trabalho, as estrelas dos depoimentos e a citação de Sobre a Júlia —
-passaram para `--t-secondary-text`, que mede **4,57:1**.
+`--t-secondary` já foi caramelo `#b5793f` — ver nota em "Identidade visual".
+Hoje é o laranja `#f47a20`, e mede só **~2,6:1** sobre o creme, abaixo até dos
+3:1 que a WCAG pede para texto grande. **Isso é esperado, não uma regressão
+para consertar**: a Natu usa esse mesmo laranja do mesmo jeito (`text-secondary`
+em título grande, ex. o Hero dela) e a cliente pediu explicitamente a mesma
+identidade. `--t-secondary-text` **não mudou junto** e ficou com o mesmo hex
+de sempre: não é a "versão pequena" da cor de marca atual, é um tom próprio
+que existe só para os quatro lugares que carregam texto miúdo — `.label-tag`,
+os numerais "01" de Como eu trabalho, as estrelas dos depoimentos e a citação
+de Sobre a Júlia. Mede **4,57:1**, dentro dos 4,5:1 de texto normal.
 
-> **Não trocar `--t-secondary` por `--t-secondary-text` no resto.** A cor da
-> marca é decisão da cliente e continua valendo em tudo que é grande ou não é
-> texto. O token novo existe para não ter que escolher entre identidade e
-> legibilidade.
+> **Não trocar `--t-secondary` por `--t-secondary-text` no resto.** Um é a cor
+> de marca (decisão da cliente, vale em tudo que é grande ou não é texto); o
+> outro é só a versão legível dela em texto pequeno. Trocar um pelo outro fora
+> desses quatro lugares mistura as duas coisas sem motivo.
 
 ### Contraste: como medir sem se enganar
 
@@ -218,21 +231,48 @@ Mentoria também — hoje são seções da one-page.
 
 Irmã da `links.astro` da Natu: mesma estrutura (banner, avatar sobreposto,
 perfil, redes, lista de botões), vestida com a identidade da Júlia — verde
-`#1e432c`, caramelo no CTA de WhatsApp, creme e botões em pílula, no lugar
-dos 8px da Natu.
+`#1e432c`, laranja de marca no CTA de WhatsApp, creme e botões em pílula, no
+lugar dos 8px da Natu. O subtítulo do perfil é "Adestradora · Presencial e
+On-line" (trocado a pedido da cliente em 2026-09-23; era "Itajubá e
+Piranguçu").
 
 **Standalone de propósito.** Não usa o `BaseLayout` nem o `global.css`: é
-aberta do Instagram, no 4G, para quatro botões. Carregar Tailwind, GSAP,
-Lenis e Swiper ali seria desperdício — hoje são 16 KB de HTML e 7,5 KB de
-CSS. O preço é declarar localmente o `@font-face` da Gliker e o punhado de
-valores que no site vêm do `@theme` (que é `inline` e não existe em runtime).
-As **cores continuam vindo de `tokens.css`**, que é `:root` puro e vive sem o
-`global.css` — a página não hardcoda paleta.
+aberta do Instagram, no 4G, para poucos botões. Carregar Tailwind, GSAP,
+Lenis e Swiper ali seria desperdício. O preço é declarar localmente o
+`@font-face` da Gliker e o punhado de valores que no site vêm do `@theme`
+(que é `inline` e não existe em runtime). As **cores continuam vindo de
+`tokens.css`**, que é `:root` puro e vive sem o `global.css` — a página não
+hardcoda paleta.
 
-Quatro links, nesta ordem: site da Júlia (verde), site da Natu,
+Quatro links pessoais, nesta ordem: site da Júlia (verde), site da Natu,
 "Deixe sua avaliação" (o mesmo perfil do Google que o `Testimonials` usa) e
-WhatsApp (caramelo). O tracking segue o padrão do site: `link_click` em tudo
-que tem `data-tracking`, e `contato_wpp` só no WhatsApp.
+WhatsApp (laranja). Depois, sob o rótulo "Parcerias com desconto", dois
+botões de parceria (Biobone, Fórmula Natural) que **não navegam direto** —
+abrem um `<dialog>` compartilhado com o cupom/código, botão de copiar
+(`navigator.clipboard`, com fallback de `execCommand` para navegador antigo)
+e só então o link para o site do parceiro. Os dados de cada parceria (nome,
+descrição, rótulo do cupom, código, href) ficam em `data-*` no botão que abre
+o modal; o JS só lê e preenche, sem duplicar a lista em outro lugar.
+
+O tracking segue o padrão do site: `link_click` em tudo que tem
+`data-tracking` (inclui os botões de parceria e o CTA "Ir para o site" de
+dentro do modal), e `contato_wpp` só no WhatsApp.
+
+> **`<dialog>` modal não centraliza sozinho nesta página.** O reset
+> `* { margin: 0 }` do topo do arquivo zera o `margin: auto` que o navegador
+> usa para centralizar um `dialog[open]` (`position:fixed; inset:0;
+> margin:auto` da UA stylesheet) — origem de autor sempre vence origem de
+> user-agent, mesmo com especificidade menor. Sem repor isso, o modal cola no
+> canto superior esquerdo. `.parceria-modal` declara `position: fixed; inset:
+> 0; margin: auto;` de novo, explícito. Vale para qualquer `<dialog>` novo
+> numa página com reset universal de margin/padding.
+>
+> **Sem transição na abertura do modal, de propósito.** É o jeito mais
+> simples de não recair na armadilha do `prefers-reduced-motion` que este
+> projeto já viu demais (marquee, pin, arraste): sem `opacity`/`transform`
+> inicial, não existe estado "preso invisível" para testar. Antes de animar a
+> entrada do modal, ver a seção de armadilhas de `prefers-reduced-motion`
+> mais abaixo.
 
 > **`noindex` e sitemap não convivem.** A página declara `noindex`, então o
 > `astro.config.mjs` a filtra do sitemap — senão o Search Console acusa
@@ -805,7 +845,7 @@ modos de movimento:
 | Item | Estado |
 |---|---|
 | Scroll horizontal | zero em todas as 12 larguras |
-| Contraste AA sobre fundo sólido | sem reprovação nas 4 páginas |
+| Contraste AA sobre fundo sólido | sem reprovação nas 4 páginas — **medido com o `--t-secondary` caramelo antigo, ver nota abaixo** |
 | Alvo de toque (WCAG 2.5.8, 24px) | sem reprovação |
 | Hierarquia de headings | sem pulo de nível |
 | `alt`, `width`/`height` nas imagens | completos |
@@ -819,6 +859,16 @@ ao layout. O `.link-underline` usa `padding-block` com o `::after` em
 
 **Footer:** quatro colunas só a partir de `xl` (1280px). Em `lg` as colunas
 ficavam com 222px e `@juliamartinsadestradora` (256px) vazava.
+
+> **A varredura de contraste acima é anterior à troca do `--t-secondary` de
+> caramelo para o laranja `#f47a20` (2026-09-23, ver "Identidade visual").**
+> O laranja mede ~2,6:1 sobre o creme — abaixo até dos 3:1 de texto grande —
+> nos lugares que usam `text-secondary` como cor de texto direto (destaque no
+> H1 do Hero, spans do Método, títulos do Footer, link ativo do Header). Não
+> é regressão a corrigir: é o mesmo trade-off que a Natu já aceita com a cor
+> dela, e a cliente pediu essa identidade de propósito. Se for reauditar
+> contraste, não "conserte" isso trocando `--t-secondary` de volta sem
+> confirmar com a cliente primeiro.
 
 **Banner de cookies:** `client:only="react"`, nunca `client:idle`. Ele decide
 a visibilidade pelo `localStorage`, que o servidor não tem — com SSR saía

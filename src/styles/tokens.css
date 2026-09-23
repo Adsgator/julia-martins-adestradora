@@ -7,27 +7,33 @@
 
   ── Identidade Julia Martins ──────────────────────────────────
   Irma da Natu Espaco Canino, nao clone. O parentesco vem do
-  verde-escuro institucional e do fundo creme, herdados da Natu.
-  A distincao vem do acento caramelo (--t-secondary), que substitui
-  o laranja #f47a20 da Natu, e de um creme mais claro e editorial.
+  verde-escuro institucional, do laranja #f47a20 de marca (--t-secondary,
+  identico ao da Natu a pedido da cliente) e do fundo creme herdado dela.
+  A distincao fica no creme mais claro e no ritmo editorial.
+
+  --t-secondary-text existe a parte: o laranja de marca mede ~2,6:1 sobre
+  o creme, abaixo dos 3:1 que a WCAG pede ate para texto grande. Nos
+  quatro lugares onde ele carregava TEXTO MIUDO (.label-tag, numerais,
+  estrelas, citacao), o token aponta para um tom mais escuro que passa em
+  4,5:1. Nao e a cor de marca — e so a versao legivel dela em texto pequeno.
 */
 
 :root {
   /* Marca */
   --t-primary: #1e432c;
   --t-primary-dark: #122819;
-  --t-secondary: #b5793f;
-  --t-secondary-hover: #c98d51;
-  /* Caramelo escuro para TEXTO PEQUENO em caramelo. O #b5793f da marca mede
-     3,43:1 sobre o creme — passa nos 3:1 de texto grande, mas reprova nos
-     4,5:1 de texto normal. Este mede 4,57:1. Não substitui o --t-secondary:
-     botão, borda, ícone e título grande continuam com a cor da marca. */
+  --t-secondary: #f47a20;
+  --t-secondary-hover: #ff8f3a;
+  /* Tom escuro para TEXTO PEQUENO, à parte do laranja de marca (ver nota
+     no topo do arquivo). Mede 4,57:1 sobre o creme. Não substitui o
+     --t-secondary: botão, borda, ícone e título grande continuam com a
+     cor da marca. */
   --t-secondary-text: #9a6533;
   --t-complement: #d6dfc4;
-  --t-accent-gold: #b5793f;
-  --t-accent-gold-hover: #c98d51;
-  --t-accent-gold-border: #9c6632;
-  --t-accent-gold-border-hover: #b5793f;
+  --t-accent-gold: #f47a20;
+  --t-accent-gold-hover: #ff8f3a;
+  --t-accent-gold-border: #db6d17;
+  --t-accent-gold-border-hover: #ea8540;
 
   /* Superficies */
   --t-background: #faf8f3;
@@ -53,7 +59,7 @@
   /* Utilitarias */
   --t-wa: #25d366;
   --t-avatar-primary: #1e432c;
-  --t-avatar-secondary: #b5793f;
+  --t-avatar-secondary: #f47a20;
   --t-avatar-tertiary: #d6dfc4;
   --t-avatar-quaternary: #eef0e7;
 
@@ -100,14 +106,14 @@
   --t-text-dark: #4a7c5f;
   --t-text-gray: #bcc4b6;
   --t-wa: #25d366;
-  --t-secondary: #cf9052;
-  --t-secondary-hover: #e0a365;
-  --t-accent-gold: #cf9052;
-  --t-accent-gold-hover: #e0a365;
-  --t-accent-gold-border: #b5793f;
-  --t-accent-gold-border-hover: #cf9052;
+  --t-secondary: #f47a20;
+  --t-secondary-hover: #ff8f3a;
+  --t-accent-gold: #f47a20;
+  --t-accent-gold-hover: #ff8f3a;
+  --t-accent-gold-border: #db6d17;
+  --t-accent-gold-border-hover: #ea8540;
   --t-avatar-primary: #d6dfc4;
-  --t-avatar-secondary: #cf9052;
+  --t-avatar-secondary: #f47a20;
   --t-avatar-tertiary: #3a4133;
   --t-avatar-quaternary: #21251e;
 }

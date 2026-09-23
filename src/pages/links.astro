@@ -46,7 +46,7 @@ const NATU_URL = "https://natuespacocanino.com.br/";
 
 const perfil = {
   nome: "Júlia Martins",
-  cargo: "Adestradora · Itajubá e Piranguçu",
+  cargo: "Adestradora · Presencial e On-line",
 };
 
 // lucide não tem o logo do TikTok — o Footer já resolve com `music-2`.
@@ -105,6 +105,37 @@ const links = [
     tracking: "click-whatsapp-links",
     variant: "gold",
     newTab: true,
+  },
+];
+
+// Parcerias externas com desconto. Não são links diretos: abrem um popup
+// com o cupom/código, um botão de copiar e só então o link para o site do
+// parceiro — assim o visitante sabe o que fazer com o código sem precisar
+// de explicação no Instagram.
+const parcerias = [
+  {
+    id: "btn-links-biobone",
+    trigger: "click-parceria-biobone",
+    ctaTracking: "click-parceria-biobone-site",
+    label: "Parceria Biobone",
+    icone: "lucide:bone",
+    partner: "Biobone",
+    desc: "Mordedores biodegradáveis para cães. Use o cupom abaixo na loja oficial e garanta seu desconto.",
+    couponLabel: "Cupom de desconto",
+    couponCode: "NATU",
+    href: "https://www.biobonebrazil.com.br?utm_campaign=NATU",
+  },
+  {
+    id: "btn-links-formula-natural",
+    trigger: "click-parceria-formula",
+    ctaTracking: "click-parceria-formula-site",
+    label: "Parceria Fórmula Natural",
+    icone: "lucide:leaf",
+    partner: "Fórmula Natural",
+    desc: "Informe o código abaixo no site da Fórmula Natural e garanta seu desconto.",
+    couponLabel: "Código de identificação",
+    couponCode: "JULIAMARTINS",
+    href: "https://fnon.com.br/indications/new",
   },
 ];
 
@@ -350,6 +381,11 @@ const pageDescription =
         /* Pílula, não os 8px da Natu: é o desenho dos botões da Júlia. */
         border-radius: 9999px;
         border: 1px solid transparent;
+        /* Dois destes botões agora são <button> (abrem popup em vez de
+           navegar). O <button> não herda cursor:pointer do <a> por
+           padrão, então precisa do reset explícito. */
+        cursor: pointer;
+        appearance: none;
         transition:
           background-color 0.3s var(--ease-smooth),
           border-color 0.3s var(--ease-smooth),
@@ -422,6 +458,187 @@ const pageDescription =
           color-mix(in srgb, var(--t-secondary-hover) 82%, var(--t-accent-gold-hover) 18%)
         );
         box-shadow: 0 6px 22px rgba(181, 121, 63, 0.36);
+      }
+
+      .parcerias-label {
+        width: 100%;
+        margin-top: 28px;
+        margin-bottom: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--t-text-muted);
+        text-align: center;
+      }
+
+      /* Modal de parceria: reaproveitado pelos dois botões, preenchido via
+         JS a partir dos data-* do botão que o abriu. Sem transição na
+         abertura de propósito — é o jeito mais simples de não recair na
+         armadilha do prefers-reduced-motion que este projeto já viu
+         demais (marquee, pin, arraste): sem opacity/transform inicial,
+         não tem estado "preso invisível" para o Windows com animação
+         desligada. */
+      dialog.parceria-modal {
+        /* O reset `* { margin: 0 }` do topo deste arquivo zera o
+           `margin: auto` que o navegador usa para centralizar um <dialog>
+           modal — sem isso ele cola no canto superior esquerdo. Precisa
+           declarar de novo, explícito, em vez de confiar no padrão da UA. */
+        position: fixed;
+        inset: 0;
+        margin: auto;
+        border: none;
+        border-radius: 20px;
+        padding: 16px 24px 24px;
+        width: min(92vw, 380px);
+        max-height: min(88vh, 520px);
+        background-color: var(--t-surface);
+        box-shadow: 0 24px 60px rgba(16, 24, 15, 0.28);
+        color: var(--t-text-main);
+      }
+
+      dialog.parceria-modal::backdrop {
+        background-color: rgba(16, 24, 15, 0.55);
+      }
+
+      dialog.parceria-modal:not([open]) {
+        display: none;
+      }
+
+      .parceria-modal__header {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .parceria-modal__close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid var(--t-border);
+        background-color: var(--t-surface);
+        color: var(--t-text-muted);
+        cursor: pointer;
+        appearance: none;
+        transition:
+          border-color 0.2s var(--ease-smooth),
+          color 0.2s var(--ease-smooth);
+      }
+
+      .parceria-modal__close:hover {
+        border-color: var(--t-primary);
+        color: var(--t-primary);
+      }
+
+      .parceria-modal__eyebrow {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--t-secondary-text);
+        margin-bottom: 6px;
+      }
+
+      .parceria-modal__title {
+        font-family: var(--t-font-serif);
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--t-primary);
+        line-height: 1.2;
+        margin-bottom: 10px;
+      }
+
+      .parceria-modal__desc {
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--t-text-soft);
+        margin-bottom: 20px;
+      }
+
+      .parceria-modal__coupon {
+        background-color: var(--t-background-strong);
+        border: 1px solid var(--t-border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 20px;
+      }
+
+      .parceria-modal__coupon-label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--t-text-muted);
+        margin-bottom: 8px;
+      }
+
+      .parceria-modal__coupon-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .parceria-modal__coupon-code {
+        flex: 1;
+        min-width: 0;
+        font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--t-primary);
+        background-color: var(--t-surface);
+        border: 1px dashed var(--t-accent-gold-border);
+        border-radius: 10px;
+        padding: 8px 12px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .parceria-modal__copy {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+        padding: 9px 14px;
+        font-family: var(--t-font-sans);
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 9999px;
+        border: 1px solid var(--t-primary);
+        background-color: var(--t-primary);
+        color: #ffffff;
+        cursor: pointer;
+        appearance: none;
+        transition:
+          background-color 0.2s var(--ease-smooth),
+          transform 0.2s var(--ease-smooth);
+      }
+
+      .parceria-modal__copy:hover {
+        background-color: var(--t-primary-dark);
+      }
+
+      .parceria-modal__copy:active {
+        transform: scale(0.97);
+      }
+
+      .parceria-modal__copy-icon.icon-check {
+        display: none;
+      }
+
+      .parceria-modal__copy.is-copied .icon-copy {
+        display: none;
+      }
+
+      .parceria-modal__copy.is-copied .icon-check {
+        display: block;
+      }
+
+      .parceria-modal__cta {
+        width: 100%;
       }
 
       .page-footer {
@@ -580,9 +797,96 @@ const pageDescription =
           ))}
         </div>
 
+        <p
+          class="parcerias-label link-item"
+          style={`animation: fadeUp 0.5s ${0.2 + links.length * 0.08}s ease both`}
+        >
+          Parcerias com desconto
+        </p>
+
+        <div class="links-list" role="list">
+          {parcerias.map((p, i) => (
+            <div
+              role="listitem"
+              class="link-item"
+              style={`animation: fadeUp 0.5s ${0.2 + (links.length + 1 + i) * 0.08}s ease both`}
+            >
+              <button
+                type="button"
+                id={p.id}
+                data-tracking={p.trigger}
+                data-section="links"
+                data-modal-trigger="true"
+                data-partner={p.partner}
+                data-desc={p.desc}
+                data-coupon-label={p.couponLabel}
+                data-coupon-code={p.couponCode}
+                data-href={p.href}
+                data-cta-tracking={p.ctaTracking}
+                aria-haspopup="dialog"
+                class="link-btn ghost"
+              >
+                <span class="link-btn__icon" aria-hidden="true">
+                  <Icon name={p.icone} width={20} height={20} aria-hidden="true" />
+                </span>
+                <span>{p.label}</span>
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <dialog id="parceria-modal" class="parceria-modal" aria-labelledby="parceria-modal-title">
+          <div class="parceria-modal__header">
+            <button type="button" class="parceria-modal__close" data-modal-close aria-label="Fechar">
+              <Icon name="lucide:x" width={18} height={18} aria-hidden="true" />
+            </button>
+          </div>
+          <p class="parceria-modal__eyebrow">Parceria</p>
+          <h2 id="parceria-modal-title" class="parceria-modal__title" data-modal-partner></h2>
+          <p class="parceria-modal__desc" data-modal-desc></p>
+
+          <div class="parceria-modal__coupon">
+            <span class="parceria-modal__coupon-label" data-modal-coupon-label></span>
+            <div class="parceria-modal__coupon-row">
+              <code class="parceria-modal__coupon-code" data-modal-coupon-code></code>
+              <button type="button" class="parceria-modal__copy" data-modal-copy>
+                <Icon
+                  name="lucide:copy"
+                  width={16}
+                  height={16}
+                  class="parceria-modal__copy-icon icon-copy"
+                  aria-hidden="true"
+                />
+                <Icon
+                  name="lucide:check"
+                  width={16}
+                  height={16}
+                  class="parceria-modal__copy-icon icon-check"
+                  aria-hidden="true"
+                />
+                <span data-modal-copy-text>Copiar</span>
+              </button>
+            </div>
+          </div>
+
+          <a
+            class="link-btn primary parceria-modal__cta"
+            data-modal-cta
+            data-section="links"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Ir para o site</span>
+            <span class="link-btn__icon" aria-hidden="true">
+              <Icon name="lucide:external-link" width={18} height={18} aria-hidden="true" />
+            </span>
+          </a>
+        </dialog>
+
         <footer
           class="page-footer link-item"
-          style={`animation: fadeUp 0.5s ${0.2 + links.length * 0.08}s ease both`}
+          style={`animation: fadeUp 0.5s ${0.2 + (links.length + 1 + parcerias.length) * 0.08}s ease both`}
         >
           <p>© {currentYear} Júlia Martins Adestradora</p>
           <p>
@@ -616,6 +920,89 @@ const pageDescription =
           });
         }
       });
+    </script>
+
+    <script is:inline>
+      (function () {
+        var modal = document.getElementById("parceria-modal");
+        if (!modal) return;
+
+        var titleEl = modal.querySelector("[data-modal-partner]");
+        var descEl = modal.querySelector("[data-modal-desc]");
+        var couponLabelEl = modal.querySelector("[data-modal-coupon-label]");
+        var couponCodeEl = modal.querySelector("[data-modal-coupon-code]");
+        var copyBtn = modal.querySelector("[data-modal-copy]");
+        var copyTextEl = modal.querySelector("[data-modal-copy-text]");
+        var ctaEl = modal.querySelector("[data-modal-cta]");
+        var closeBtn = modal.querySelector("[data-modal-close]");
+        var copyResetTimer = null;
+
+        document.querySelectorAll("[data-modal-trigger]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            titleEl.textContent = btn.getAttribute("data-partner") || "";
+            descEl.textContent = btn.getAttribute("data-desc") || "";
+            couponLabelEl.textContent = btn.getAttribute("data-coupon-label") || "";
+            couponCodeEl.textContent = btn.getAttribute("data-coupon-code") || "";
+            ctaEl.href = btn.getAttribute("data-href") || "#";
+            ctaEl.setAttribute("data-tracking", btn.getAttribute("data-cta-tracking") || "");
+            copyBtn.classList.remove("is-copied");
+            copyTextEl.textContent = "Copiar";
+            if (copyResetTimer) clearTimeout(copyResetTimer);
+            modal.showModal();
+          });
+        });
+
+        closeBtn.addEventListener("click", function () {
+          modal.close();
+        });
+
+        // Clique no backdrop fecha: só o próprio <dialog> como target
+        // (não um filho) indica que o clique caiu fora do cartão.
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) modal.close();
+        });
+
+        function fallbackCopy(text) {
+          var textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.appendChild(textarea);
+          textarea.select();
+          try {
+            document.execCommand("copy");
+          } catch (err) {}
+          document.body.removeChild(textarea);
+        }
+
+        copyBtn.addEventListener("click", function () {
+          var code = couponCodeEl.textContent;
+          if (!code) return;
+
+          function onCopied() {
+            copyBtn.classList.add("is-copied");
+            copyTextEl.textContent = "Copiado!";
+            if (copyResetTimer) clearTimeout(copyResetTimer);
+            copyResetTimer = setTimeout(function () {
+              copyBtn.classList.remove("is-copied");
+              copyTextEl.textContent = "Copiar";
+            }, 2000);
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard
+              .writeText(code)
+              .then(onCopied)
+              .catch(function () {
+                fallbackCopy(code);
+                onCopied();
+              });
+          } else {
+            fallbackCopy(code);
+            onCopied();
+          }
+        });
+      })();
     </script>
   </body>
 </html>
