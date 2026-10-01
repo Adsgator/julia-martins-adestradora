@@ -7,7 +7,7 @@
 // verde #1e432c, caramelo no CTA, creme mais claro e botões em pílula.
 //
 // **Standalone de propósito.** Não usa o BaseLayout nem o global.css: é
-// aberta do Instagram, no 4G, para quatro botões. Carregar Tailwind, GSAP,
+// aberta do Instagram, no 4G, para uma lista de botões. Carregar Tailwind, GSAP,
 // Lenis e Swiper aqui seria desperdício. O preço é declarar o @font-face da
 // Gliker e alguns valores de raio/sombra localmente, já que o `@theme` do
 // global.css é `inline` e não existe em runtime.
@@ -108,6 +108,22 @@ const links = [
   },
 ];
 
+// Links diretos para a Amazon, sem modal.
+const ebooks = [
+  {
+    id: "btn-links-ebook-feliz",
+    label: "Feliz Pra Cachorro",
+    href: "https://www.amazon.com.br/FELIZ-PRA-CACHORRO-Enriquecimento-Ambiental-ebook/dp/B0F1X7KHZD/ref=cm_cr_arp_d_product_top?ie=UTF8",
+    tracking: "click-ebook-feliz-links",
+  },
+  {
+    id: "btn-links-ebook-xixi",
+    label: "Xixi no Lugar Certo",
+    href: "https://a.co/d/0iFwjY5I",
+    tracking: "click-ebook-xixi-links",
+  },
+];
+
 // Parcerias externas com desconto. Não são links diretos: abrem um popup
 // com o cupom/código, um botão de copiar e só então o link para o site do
 // parceiro — assim o visitante sabe o que fazer com o código sem precisar
@@ -137,7 +153,25 @@ const parcerias = [
     couponCode: "JULIAMARTINS",
     href: "https://fnon.com.br/indications/new",
   },
+  {
+    id: "btn-links-petz",
+    trigger: "click-parceria-petz",
+    ctaTracking: "click-parceria-petz-site",
+    label: "Parceria Petz",
+    icone: "lucide:shopping-bag",
+    partner: "Petz",
+    desc: "Use o cupom abaixo no site da Petz e garanta seu desconto.",
+    couponLabel: "Cupom de desconto",
+    couponCode: "DOGSFIT",
+    href: "https://www.petz.com.br/parceiro/dogsfit",
+  },
 ];
+
+// Entrada em cascata: cada botão ou rótulo de grupo é um degrau de 0.08s.
+const fadeUp = (step: number) => `animation: fadeUp 0.5s ${0.2 + step * 0.08}s ease both`;
+const ebooksStep = links.length;
+const parceriasStep = ebooksStep + 1 + ebooks.length;
+const footerStep = parceriasStep + 1 + parcerias.length;
 
 const currentYear = new Date().getFullYear();
 const pageTitle = "Júlia Martins Adestradora | Links";
@@ -460,7 +494,7 @@ const pageDescription =
         box-shadow: 0 6px 22px rgba(181, 121, 63, 0.36);
       }
 
-      .parcerias-label {
+      .group-label {
         width: 100%;
         margin-top: 28px;
         margin-bottom: 4px;
@@ -765,7 +799,7 @@ const pageDescription =
             <div
               role="listitem"
               class="link-item"
-              style={`animation: fadeUp 0.5s ${0.2 + i * 0.08}s ease both`}
+              style={fadeUp(i)}
             >
               <a
                 href={link.href}
@@ -797,20 +831,34 @@ const pageDescription =
           ))}
         </div>
 
-        <p
-          class="parcerias-label link-item"
-          style={`animation: fadeUp 0.5s ${0.2 + links.length * 0.08}s ease both`}
-        >
-          Parcerias com desconto
-        </p>
+        <p class="group-label link-item" style={fadeUp(ebooksStep)}>E-books</p>
+
+        <div class="links-list" role="list">
+          {ebooks.map((ebook, i) => (
+            <div role="listitem" class="link-item" style={fadeUp(ebooksStep + 1 + i)}>
+              <a
+                href={ebook.href}
+                id={ebook.id}
+                data-tracking={ebook.tracking}
+                data-section="links"
+                class="link-btn ghost"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="link-btn__icon" aria-hidden="true">
+                  <Icon name="lucide:book-open" width={20} height={20} aria-hidden="true" />
+                </span>
+                <span>{ebook.label}</span>
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <p class="group-label link-item" style={fadeUp(parceriasStep)}>Parcerias com desconto</p>
 
         <div class="links-list" role="list">
           {parcerias.map((p, i) => (
-            <div
-              role="listitem"
-              class="link-item"
-              style={`animation: fadeUp 0.5s ${0.2 + (links.length + 1 + i) * 0.08}s ease both`}
-            >
+            <div role="listitem" class="link-item" style={fadeUp(parceriasStep + 1 + i)}>
               <button
                 type="button"
                 id={p.id}
@@ -884,10 +932,7 @@ const pageDescription =
           </a>
         </dialog>
 
-        <footer
-          class="page-footer link-item"
-          style={`animation: fadeUp 0.5s ${0.2 + (links.length + 1 + parcerias.length) * 0.08}s ease both`}
-        >
+        <footer class="page-footer link-item" style={fadeUp(footerStep)}>
           <p>© {currentYear} Júlia Martins Adestradora</p>
           <p>
             <a href="/politica-de-privacidade">Política de Privacidade</a> ·

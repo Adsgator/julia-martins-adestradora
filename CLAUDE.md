@@ -246,8 +246,10 @@ hardcoda paleta.
 
 Quatro links pessoais, nesta ordem: site da Júlia (verde), site da Natu,
 "Deixe sua avaliação" (o mesmo perfil do Google que o `Testimonials` usa) e
-WhatsApp (laranja). Depois, sob o rótulo "Parcerias com desconto", dois
-botões de parceria (Biobone, Fórmula Natural) que **não navegam direto** —
+WhatsApp (laranja). Depois, sob o rótulo "E-books", os dois e-books dela na
+Amazon (Feliz Pra Cachorro, Xixi no Lugar Certo), em link direto. Por fim,
+sob "Parcerias com desconto", três botões de parceria (Biobone, Fórmula
+Natural, Petz) que **não navegam direto** —
 abrem um `<dialog>` compartilhado com o cupom/código, botão de copiar
 (`navigator.clipboard`, com fallback de `execCommand` para navegador antigo)
 e só então o link para o site do parceiro. Os dados de cada parceria (nome,
